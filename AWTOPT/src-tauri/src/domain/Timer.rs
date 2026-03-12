@@ -2,42 +2,46 @@ struct Timer {
     state: TimerState,
     current_cycle_index: usize,
     time_remaining: u64,
+    sequence_list: Vec<Sequence>,
+    durations: (u64, u64, u64), // (work_duration, short_break_duration, long_break_duration)
 }
 
 enum TimerState {
     Idle,
-    Running(Sequence),  // carries the current phase
+    Running(Sequence), // work, short break, or long break
     Paused,
     Completed,
 }
 
 impl Timer {
-    pub fn new() -> Self {
-        Timer { state: TimerState::Idle, current_cycle_index: 0, time_remaining: 0 }
+    pub fn new(settings: &Settings) -> Self {
+        Timer { 
+            state: TimerState::Idle, 
+            current_cycle_index: 0, 
+            time_remaining: 0,
+            sequence_list: vec![Sequence::Work, Sequence::Break, Sequence::Work, Sequence::BreakLong],
+            durations: (settings.workDuration, settings.shortBreakDuration, settings.longBreakDuration),
+        }
     }
 
-    pub fn start(&mut self, settings: &Settings) {
+    pub fn start(&mut self) {
         if let TimerState::Idle = self.state {
             self.current_cycle_index = 0;
-            self.time_remaining = settings.workDuration * 60;
+            self.time_remaining = self.durations.0 * 60;
             self.state = TimerState::Running(Sequence::Work);
         }
     }
 
     pub fn pause(&mut self) {
-        if let TimerState::Running(Sequence) | TimerState::RunningBreak | TimerState::RunningBreakLong = self.state {
+        if let TimerState::Running(_) = self.state {
             self.state = TimerState::Paused;
         }
     }
 
     pub fn resume(&mut self) {
         if let TimerState::Paused = self.state {
-            match self.current_cycle_index {
-                0 | 2 => self.state = TimerState::Running(Sequence::Work),
-                1 => self.state = TimerState::Running(Sequence::Break),
-                3 => self.state = TimerState::Running(Sequence::BreakLong),
-                _ => (),
-            }
+            let current_sequence = self.sequence_list[self.current_cycle_index];
+            self.state = TimerState::Running(current_sequence);
         }
     }
 
@@ -50,14 +54,21 @@ impl Timer {
 
 #[test]
 fn test_timer() {
-    let mut timer = Timer::new();
     let settings = Settings::new();
-    timer.start(&settings);
-    assert_eq!(timer.state, TimerState::Running(Sequence::Work));
+    let mut timer = Timer::new(&settings);
+    
+    assert!(matches!(timer.state, TimerState::Idle));
+    
+    timer.start();
+    assert!(matches!(timer.state, TimerState::Running(Sequence::Work)));
+    assert_eq!(timer.time_remaining, settings.workDuration * 60);
+    
     timer.pause();
-    assert_eq!(timer.state, TimerState::Paused);
+    assert!(matches!(timer.state, TimerState::Paused));
+    
     timer.resume();
-    assert_eq!(timer.state, TimerState::Running(Sequence::Work));
+    assert!(matches!(timer.state, TimerState::Running(Sequence::Work)));
+    
     timer.reset();
-    assert_eq!(timer.state, TimerState::Idle);
+    assert!(matches!(timer.state, TimerState::Idle));
 }
