@@ -6,11 +6,11 @@ pub enum Sequence {
 }
 
 pub struct Settings {
-    pub work_duration: u64,
-    pub short_break_duration: u64,
-    pub long_break_duration: u64,
-    pub auto_start_breaks: bool,
-    pub sequence_list: Vec<Sequence>,
+    work_duration: u64,
+    short_break_duration: u64,
+    long_break_duration: u64,
+    auto_start_breaks: bool,
+    sequence_list: Vec<Sequence>,
 }
 
 impl Settings {
@@ -42,6 +42,26 @@ impl Settings {
 
     pub fn update_sequence_list(&mut self, sequence_list: Vec<Sequence>) {
         self.sequence_list = sequence_list;
+    }
+
+    pub fn get_work_duration(&self) -> u64 {
+        self.work_duration
+    }
+
+    pub fn get_short_break_duration(&self) -> u64 {
+        self.short_break_duration
+    }
+
+    pub fn get_long_break_duration(&self) -> u64 {
+        self.long_break_duration
+    }
+
+    pub fn is_auto_start_breaks(&self) -> bool {
+        self.auto_start_breaks
+    }
+
+    pub fn get_sequence_list(&self) -> &Vec<Sequence> {
+        &self.sequence_list
     }
 }
 

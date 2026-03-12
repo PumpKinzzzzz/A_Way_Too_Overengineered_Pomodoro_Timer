@@ -19,8 +19,8 @@ impl Timer {
             state: TimerState::Idle, 
             current_cycle_index: 0, 
             time_remaining: 0,
-            sequence_list: vec![Sequence::Work, Sequence::Break, Sequence::Work, Sequence::BreakLong],
-            durations: (settings.workDuration, settings.shortBreakDuration, settings.longBreakDuration),
+            sequence_list: settings.get_sequence_list().clone(),
+            durations: (settings.get_work_duration(), settings.get_short_break_duration(), settings.get_long_break_duration()),
         }
     }
 
@@ -90,7 +90,7 @@ fn test_timer() {
     
     timer.start();
     assert!(matches!(timer.state, TimerState::Running(Sequence::Work)));
-    assert_eq!(timer.time_remaining, settings.workDuration * 60);
+    assert_eq!(timer.time_remaining, settings.get_work_duration() * 60);
     
     timer.pause();
     assert!(matches!(timer.state, TimerState::Paused));
