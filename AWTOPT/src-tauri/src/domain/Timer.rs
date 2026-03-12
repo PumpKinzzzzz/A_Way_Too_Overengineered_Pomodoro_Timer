@@ -24,6 +24,10 @@ impl Timer {
         }
     }
 
+    pub fn get_state(&self) -> &TimerState {
+        &self.state
+    }
+
     pub fn start(&mut self) {
         if let TimerState::Idle = self.state {
             self.current_cycle_index = 0;
