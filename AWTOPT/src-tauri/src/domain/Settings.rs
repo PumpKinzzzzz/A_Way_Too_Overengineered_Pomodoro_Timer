@@ -5,51 +5,51 @@ enum Sequence {
 }
 
 struct Settings {
-    workDuration: u64,
-    shortBreakDuration: u64,
-    longBreakDuration: u64,
-    autoStartBreaks: bool,
-    sequenceList: Vec<Sequence>,
+    work_duration: u64,
+    short_break_duration: u64,
+    long_break_duration: u64,
+    auto_start_breaks: bool,
+    sequence_list: Vec<Sequence>,
 }
 
 impl Settings {
     pub fn new() -> Self {
         Settings {
-            workDuration: 25,
-            shortBreakDuration: 5,
-            longBreakDuration: 15,
-            autoStartBreaks: true,
-            sequenceList: vec![Sequence::Work, Sequence::ShortBreak, Sequence::Work, Sequence::LongBreak],
+            work_duration: 25,
+            short_break_duration: 5,
+            long_break_duration: 15,
+            auto_start_breaks: true,
+            sequence_list: vec![Sequence::Work, Sequence::ShortBreak, Sequence::Work, Sequence::LongBreak],
         }
     }
 
-    pub fn updateWorkDuration(&mut self, duration: u64) {
-        self.workDuration = duration;
+    pub fn update_work_duration(&mut self, duration: u64) {
+        self.work_duration = duration;
     }
 
-    pub fn updateShortBreakDuration(&mut self, duration: u64) {
-        self.shortBreakDuration = duration;
+    pub fn update_short_break_duration(&mut self, duration: u64) {
+        self.short_break_duration = duration;
     }
 
-    pub fn updateLongBreakDuration(&mut self, duration: u64) {
-        self.longBreakDuration = duration;
+    pub fn update_long_break_duration(&mut self, duration: u64) {
+        self.long_break_duration = duration;
     }
 
-    pub fn toggleAutoStartBreaks(&mut self) {
-        self.autoStartBreaks = !self.autoStartBreaks;
+    pub fn toggle_auto_start_breaks(&mut self) {
+        self.auto_start_breaks = !self.auto_start_breaks;
     }
 
-    pub fn updateSequenceList(&mut self, sequenceList: Vec<Sequence>) {
-        self.sequenceList = sequenceList;
+    pub fn update_sequence_list(&mut self, sequence_list: Vec<Sequence>) {
+        self.sequence_list = sequence_list;
     }
 }
 
 #[test]
 fn test_settings() {
     let mut settings = Settings::new();
-    assert_eq!(settings.workDuration, 25);
-    settings.updateWorkDuration(30);
-    assert_eq!(settings.workDuration, 30);
-    settings.toggleAutoStartBreaks();
-    assert_eq!(settings.autoStartBreaks, false);
+    assert_eq!(settings.work_duration, 25);
+    settings.update_work_duration(30);
+    assert_eq!(settings.work_duration, 30);
+    settings.toggle_auto_start_breaks();
+    assert_eq!(settings.auto_start_breaks, false);
 }

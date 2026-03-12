@@ -1,43 +1,41 @@
 struct Timer {
     state: TimerState,
-    currentCycleIndex: usize,
-    timeRemaining: u64,
+    current_cycle_index: usize,
+    time_remaining: u64,
 }
 
 enum TimerState {
     Idle,
-    RunningWork,
-    RunningBreak,
-    RunningBreakLong,
+    Running(Sequence),  // carries the current phase
     Paused,
     Completed,
 }
 
 impl Timer {
     pub fn new() -> Self {
-        Timer { state: TimerState::Idle, currentCycleIndex: 0, timeRemaining: 0, startedAt: Timestamp::now() }
+        Timer { state: TimerState::Idle, current_cycle_index: 0, time_remaining: 0 }
     }
 
     pub fn start(&mut self, settings: &Settings) {
         if let TimerState::Idle = self.state {
-            self.currentCycleIndex = 0;
-            self.timeRemaining = settings.workDuration * 60;
-            self.state = TimerState::RunningWork;
+            self.current_cycle_index = 0;
+            self.time_remaining = settings.workDuration * 60;
+            self.state = TimerState::Running(Sequence::Work);
         }
     }
 
     pub fn pause(&mut self) {
-        if let TimerState::RunningWork | TimerState::RunningBreak | TimerState::RunningBreakLong = self.state {
+        if let TimerState::Running(Sequence) | TimerState::RunningBreak | TimerState::RunningBreakLong = self.state {
             self.state = TimerState::Paused;
         }
     }
 
     pub fn resume(&mut self) {
         if let TimerState::Paused = self.state {
-            match self.currentCycleIndex {
-                0 | 2 => self.state = TimerState::RunningWork,
-                1 => self.state = TimerState::RunningBreak,
-                3 => self.state = TimerState::RunningBreakLong,
+            match self.current_cycle_index {
+                0 | 2 => self.state = TimerState::Running(Sequence::Work),
+                1 => self.state = TimerState::Running(Sequence::Break),
+                3 => self.state = TimerState::Running(Sequence::BreakLong),
                 _ => (),
             }
         }
@@ -45,8 +43,8 @@ impl Timer {
 
     pub fn reset(&mut self) {
         self.state = TimerState::Idle;
-        self.currentCycleIndex = 0;
-        self.timeRemaining = 0;
+        self.current_cycle_index = 0;
+        self.time_remaining = 0;
     }
 }
 
@@ -55,11 +53,11 @@ fn test_timer() {
     let mut timer = Timer::new();
     let settings = Settings::new();
     timer.start(&settings);
-    assert_eq!(timer.state, TimerState::RunningWork);
+    assert_eq!(timer.state, TimerState::Running(Sequence::Work));
     timer.pause();
     assert_eq!(timer.state, TimerState::Paused);
     timer.resume();
-    assert_eq!(timer.state, TimerState::RunningWork);
+    assert_eq!(timer.state, TimerState::Running(Sequence::Work));
     timer.reset();
     assert_eq!(timer.state, TimerState::Idle);
 }
