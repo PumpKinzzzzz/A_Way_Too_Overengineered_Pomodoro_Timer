@@ -1,15 +1,16 @@
-enum Sequence {
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Sequence {
     Work,
     ShortBreak,
     LongBreak,
 }
 
-struct Settings {
-    work_duration: u64,
-    short_break_duration: u64,
-    long_break_duration: u64,
-    auto_start_breaks: bool,
-    sequence_list: Vec<Sequence>,
+pub struct Settings {
+    pub work_duration: u64,
+    pub short_break_duration: u64,
+    pub long_break_duration: u64,
+    pub auto_start_breaks: bool,
+    pub sequence_list: Vec<Sequence>,
 }
 
 impl Settings {
