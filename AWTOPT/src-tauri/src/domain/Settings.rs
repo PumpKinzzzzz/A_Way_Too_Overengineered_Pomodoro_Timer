@@ -50,6 +50,20 @@ fn test_settings() {
     assert_eq!(settings.work_duration, 25);
     settings.update_work_duration(30);
     assert_eq!(settings.work_duration, 30);
+
+    assert_eq!(settings.short_break_duration, 5);
+    settings.update_short_break_duration(10);
+    assert_eq!(settings.short_break_duration, 10);
+
+    assert_eq!(settings.long_break_duration, 15);
+    settings.update_long_break_duration(20);
+    assert_eq!(settings.long_break_duration, 20);
+
+    assert_eq!(settings.auto_start_breaks, true);
     settings.toggle_auto_start_breaks();
     assert_eq!(settings.auto_start_breaks, false);
+
+    let new_sequence = vec![Sequence::Work, Sequence::Work, Sequence::ShortBreak];
+    settings.update_sequence_list(new_sequence.clone());
+    assert_eq!(settings.sequence_list, new_sequence);
 }

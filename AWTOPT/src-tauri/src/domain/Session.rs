@@ -6,7 +6,7 @@ struct Session {
 
 impl Session {
     pub fn new() -> Self {
-        Session { time_elapsed: 0, completed_cycles: 0, date: Timestamp::now().to_string() }
+        Session { time_elapsed: 0, completed_cycles: 0, date: String::new() }
     }
 
     pub fn update_time_elapsed(&mut self, time: u64) {
@@ -22,9 +22,11 @@ impl Session {
 fn test_session() {
     let mut session = Session::new();
     assert_eq!(session.time_elapsed, 0);
+    assert_eq!(session.completed_cycles, 0);
+
     session.update_time_elapsed(1500);
     assert_eq!(session.time_elapsed, 1500);
-    assert_eq!(session.completed_cycles, 0);
+
     session.increment_completed_cycles();
     assert_eq!(session.completed_cycles, 1);
 }
