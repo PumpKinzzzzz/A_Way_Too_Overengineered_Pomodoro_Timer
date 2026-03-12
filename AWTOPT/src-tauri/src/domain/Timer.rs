@@ -28,7 +28,7 @@ impl Timer {
         if let TimerState::Idle = self.state {
             self.current_cycle_index = 0;
             self.time_remaining = self.durations.0 * 60;
-            self.state = TimerState::Running(Sequence::Work);
+            self.state = TimerState::Running(self.sequence_list[self.current_cycle_index]);
         }
     }
 
@@ -49,6 +49,31 @@ impl Timer {
         self.state = TimerState::Idle;
         self.current_cycle_index = 0;
         self.time_remaining = 0;
+    }
+
+    pub fn tick(&mut self) {
+        if let TimerState::Running(_) = self.state {
+            if self.time_remaining > 0 {
+                self.time_remaining -= 1;
+            }
+
+            if self.time_remaining == 0 {
+                self.current_cycle_index += 1;
+
+                if self.current_cycle_index >= self.sequence_list.len() {
+                    self.state = TimerState::Completed;
+                    return;
+                }
+
+                let next = self.sequence_list[self.current_cycle_index];
+                self.time_remaining = match next {
+                    Sequence::Work => self.durations.0 * 60,
+                    Sequence::Break => self.durations.1 * 60,
+                    Sequence::BreakLong => self.durations.2 * 60,
+                };
+                self.state = TimerState::Running(next);
+            }
+        }
     }
 }
 
