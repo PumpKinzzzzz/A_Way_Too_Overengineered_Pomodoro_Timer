@@ -1,9 +1,4 @@
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum Sequence {
-    Work,
-    ShortBreak,
-    LongBreak,
-}
+use super::types::Sequence;
 
 pub struct Settings {
     work_duration: u64,

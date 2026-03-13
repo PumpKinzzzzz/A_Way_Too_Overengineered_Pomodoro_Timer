@@ -1,3 +1,6 @@
+use super::types::Sequence;
+use super::settings::Settings;
+
 struct Timer {
     state: TimerState,
     current_cycle_index: usize,
@@ -72,8 +75,8 @@ impl Timer {
                 let next = self.sequence_list[self.current_cycle_index];
                 self.time_remaining = match next {
                     Sequence::Work => self.durations.0 * 60,
-                    Sequence::Break => self.durations.1 * 60,
-                    Sequence::BreakLong => self.durations.2 * 60,
+                    Sequence::ShortBreak => self.durations.1 * 60,
+                    Sequence::LongBreak => self.durations.2 * 60,
                 };
                 self.state = TimerState::Running(next);
             }
