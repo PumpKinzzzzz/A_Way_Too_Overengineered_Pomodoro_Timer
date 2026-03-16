@@ -10,8 +10,6 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  # Create release draft
-  create-release:
   create-release:
     name: Create Release
     runs-on: ubuntu-latest
@@ -43,7 +41,6 @@ jobs:
             })
             return data.id
 
-  # Build cross-platform binaries
   build-binaries:
     name: Build ${{ matrix.platform }}
     runs-on: ${{ matrix.os }}
@@ -149,7 +146,6 @@ jobs:
           asset_name: AWTOPT-${{ matrix.platform }}.dmg
           asset_content_type: application/octet-stream
 
-  # Publish release
   publish-release:
     name: Publish Release
     runs-on: ubuntu-latest
@@ -171,7 +167,6 @@ jobs:
               prerelease: false
             })
 
-  # Notification (optional)
   notify:
     name: Notify Release
     runs-on: ubuntu-latest  

@@ -61,6 +61,16 @@ npm run tauri:build:debug        # Test Tauri build
 3. **Wait** for CI to complete (~15-20min)
 4. **Check** artifacts on [Releases](../../releases)
 
+### **Redoing a failed release**
+1. Delete the failed release draft on GitHub
+2. Delete the tag locally and remotely:
+    ```bash
+    git tag -d v1.0.0
+    git push origin --delete v1.0.0
+    ```
+3. Recreate and push the tag as above
+4. Monitor the new release workflow
+
 ### **CI/CD debugging**
 
 ```bash

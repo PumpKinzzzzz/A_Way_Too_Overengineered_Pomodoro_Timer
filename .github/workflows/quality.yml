@@ -15,7 +15,6 @@ env:
 jobs:
   # Code coverage
   coverage:
-  coverage:
     name: Code Coverage
     runs-on: ubuntu-latest
     if: github.event_name != 'schedule'
@@ -85,10 +84,7 @@ jobs:
           cargo build --release
           ls -lah target/release/awtopt* || echo "Binary not found"
 
-      - name: Dependency analysis
-        run: |
-          echo "Dependency Analysis"
-          echo "=================="
+  # Dependency analysis  
   dependency-analysis:
     name: Dependency Analysis  
     runs-on: ubuntu-latest
@@ -125,9 +121,7 @@ jobs:
           npm audit --audit-level high
           npx npm-check-updates --doctor || echo "Some npm packages could be updated"
 
-  # ===============================
   # CODE QUALITY METRICS
-  # ===============================  
   quality-metrics:
     name: Quality Metrics
     runs-on: ubuntu-latest
@@ -148,7 +142,7 @@ jobs:
       - name: Code statistics
         run: |
           echo "Code Quality Metrics"
-          echo "===================="
+          echo "=================="
           tokei . --exclude target
           echo ""
           echo "Rust specific metrics:"  
@@ -158,12 +152,10 @@ jobs:
       - name: Clippy detailed analysis
         run: |
           echo "Detailed Clippy Analysis"
-          echo "======================"
+          echo "====================="
           cargo clippy --all-targets --all-features -- -W clippy::all -W clippy::pedantic -A clippy::module_name_repetitions -A clippy::too_many_lines
 
-  # ===============================
-  # INTEGRATION QUALITY SUMMARY
-  # ===============================
+  # Integration quality summary
   quality-summary:
     name: Quality Summary  
     runs-on: ubuntu-latest
