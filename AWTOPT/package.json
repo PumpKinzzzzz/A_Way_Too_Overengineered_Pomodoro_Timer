@@ -9,7 +9,18 @@
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build",
+    "tauri:build:debug": "tauri build --debug",
+    
+    "ci:frontend": "npm ci && npm run check && npm run build",
+    "ci:test": "echo 'Frontend tests to be implemented'",
+    
+    "format": "prettier --write src/ && npm run check",
+    "lint": "npm run check",
+    "audit:fix": "npm audit fix"
   },
   "license": "MIT",
   "dependencies": {
