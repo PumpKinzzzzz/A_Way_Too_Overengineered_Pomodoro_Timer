@@ -9,8 +9,14 @@ on:
     # Run weekly quality check every Sunday at 2 AM
     - cron: '0 2 * * 0'
 
+# Add explicit permissions
+permissions:
+  contents: read
+  actions: write
+
 env:
   CARGO_TERM_COLOR: always
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   # Code coverage

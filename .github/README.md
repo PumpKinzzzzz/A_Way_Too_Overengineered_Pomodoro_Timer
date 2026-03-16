@@ -62,13 +62,20 @@ npm run tauri:build:debug        # Test Tauri build
 4. **Check** artifacts on [Releases](../../releases)
 
 ### **Redoing a failed release**
-1. Delete the failed release draft on GitHub
+1. Delete the failed release draft on GitHub (if it was created)
 2. Delete the tag locally and remotely:
     ```bash
-    git tag -d v1.0.0
-    git push origin --delete v1.0.0
+    git tag -d v0.2.0
+    git push origin --delete v0.2.0
     ```
-3. Recreate and push the tag as above
+3. Commit any workflow fixes, then recreate and push the tag:
+    ```bash
+    git add .github/workflows/
+    git commit -m "fix: add GitHub permissions and Node.js 24 support"
+    git push origin main
+    git tag -a v0.2.0 -m "Release v0.2.0: Add CI/CD pipeline"
+    git push origin v0.2.0
+    ```
 4. Monitor the new release workflow
 
 ### **CI/CD debugging**
