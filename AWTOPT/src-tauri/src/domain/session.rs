@@ -1,4 +1,4 @@
-struct Session {
+pub struct Session {
     time_elapsed: u64,
     completed_cycles: usize,
     date: String,

@@ -1,7 +1,7 @@
 use super::types::Sequence;
 use super::settings::Settings;
 
-struct Timer {
+pub struct Timer {
     state: TimerState,
     current_cycle_index: usize,
     time_remaining: u64,
@@ -29,6 +29,10 @@ impl Timer {
 
     pub fn get_state(&self) -> &TimerState {
         &self.state
+    }
+
+    pub fn get_time_remaining(&self) -> u64 {
+        self.time_remaining
     }
 
     pub fn start(&mut self) {
