@@ -9,8 +9,6 @@ on:
 # Add explicit permissions for GITHUB_TOKEN
 permissions:
   contents: write
-  releases: write
-  actions: write
 
 env:
   CARGO_TERM_COLOR: always
