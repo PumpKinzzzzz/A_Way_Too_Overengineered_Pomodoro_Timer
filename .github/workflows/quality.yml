@@ -45,6 +45,9 @@ jobs:
         with:
           workspaces: './AWTOPT/src-tauri -> target'
 
+      - name: Install system dependencies (Ubuntu)
+        uses: ./.github/actions/install-tauri-linux-deps
+
       - name: Generate coverage report
         run: cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
 
@@ -79,6 +82,9 @@ jobs:
         uses: swatinem/rust-cache@v2
         with:
           workspaces: './AWTOPT/src-tauri -> target'
+
+      - name: Install system dependencies (Ubuntu)
+        uses: ./.github/actions/install-tauri-linux-deps
 
       - name: Build time benchmark
         run: |
@@ -143,6 +149,9 @@ jobs:
 
       - name: Setup Rust  
         uses: dtolnay/rust-toolchain@stable
+
+      - name: Install system dependencies (Ubuntu)
+        uses: ./.github/actions/install-tauri-linux-deps
 
       - name: Install tokei (line counter)
         run: cargo install tokei
