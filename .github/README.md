@@ -134,7 +134,7 @@ CHANGELOG.md            # Version notes
 ### **CI fails on system dependencies** 
 ```bash
 # Workflows automatically install these packages on Ubuntu:
-sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev librsvg2-dev libglib2.0-dev
+sudo apt-get install -y build-essential pkg-config libgtk-3-dev libwebkit2gtk-4.1-dev librsvg2-dev libglib2.0-dev
 # macOS and Windows: no additional dependencies required
 ```
 
