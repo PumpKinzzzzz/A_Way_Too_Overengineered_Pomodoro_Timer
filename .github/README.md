@@ -131,13 +131,6 @@ CHANGELOG.md            # Version notes
 
 ## Common troubleshooting
 
-### **CI fails on system dependencies** 
-```bash
-# Workflows automatically install:
-sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev librsvg2-dev  # Linux
-# macOS and Windows: no additional dependencies
-```
-
 ### **Release workflow doesn't trigger**
 - Check tag format: `v1.0.0` (with 'v')  
 - Tag pushed: `git push origin v1.0.0`
