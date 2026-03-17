@@ -1,6 +1,6 @@
-use crate::domain::timer::Timer;
 use crate::domain::session::Session;
 use crate::domain::settings::Settings;
+use crate::domain::timer::Timer;
 use crate::ports::outbound::notify::NotifyPort;
 use crate::ports::outbound::save::Save;
 use crate::ports::outbound::schedule::Scheduler;
@@ -38,7 +38,6 @@ impl<N: NotifyPort, S: Save, Sc: Scheduler> TimerPort for TimerService<N, S, Sc>
         self.timer.start();
         self.scheduler.start_ticking();
         self.notifier.notify("Timer", "Timer started!");
-        
     }
 
     fn pause(&mut self) {
@@ -61,7 +60,12 @@ impl<N: NotifyPort, S: Save, Sc: Scheduler> TimerPort for TimerService<N, S, Sc>
 
     fn tick(&mut self) {
         self.timer.tick();
-        
         // TODO: Vérifier si un cycle vient de finir
+    }
+}
+
+impl<N: NotifyPort, S: Save, Sc: Scheduler> TimerService<N, S, Sc> {
+    pub fn save_session(&mut self) {
+        self.saver.save_session(&self.session);
     }
 }

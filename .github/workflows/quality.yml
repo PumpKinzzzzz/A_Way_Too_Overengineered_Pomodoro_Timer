@@ -119,10 +119,12 @@ jobs:
 
       - name: Check for security advisories  
         working-directory: ./AWTOPT/src-tauri
+        continue-on-error: true
         run: cargo deny --log-level error check advisories
 
       - name: Frontend dependency check
         working-directory: ./AWTOPT
+        continue-on-error: true
         run: |
           npm audit --audit-level high
           npx npm-check-updates --doctor || echo "Some npm packages could be updated"

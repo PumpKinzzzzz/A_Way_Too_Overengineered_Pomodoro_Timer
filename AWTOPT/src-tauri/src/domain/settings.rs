@@ -8,6 +8,12 @@ pub struct Settings {
     sequence_list: Vec<Sequence>,
 }
 
+impl Default for Settings {
+    fn default() -> Self {
+        Settings::new()
+    }
+}
+
 impl Settings {
     pub fn new() -> Self {
         Settings {
@@ -15,7 +21,12 @@ impl Settings {
             short_break_duration: 5,
             long_break_duration: 15,
             auto_start_breaks: true,
-            sequence_list: vec![Sequence::Work, Sequence::ShortBreak, Sequence::Work, Sequence::LongBreak],
+            sequence_list: vec![
+                Sequence::Work,
+                Sequence::ShortBreak,
+                Sequence::Work,
+                Sequence::LongBreak,
+            ],
         }
     }
 
@@ -75,9 +86,9 @@ fn test_settings() {
     settings.update_long_break_duration(20);
     assert_eq!(settings.long_break_duration, 20);
 
-    assert_eq!(settings.auto_start_breaks, true);
+    assert!(settings.auto_start_breaks);
     settings.toggle_auto_start_breaks();
-    assert_eq!(settings.auto_start_breaks, false);
+    assert!(!settings.auto_start_breaks);
 
     let new_sequence = vec![Sequence::Work, Sequence::Work, Sequence::ShortBreak];
     settings.update_sequence_list(new_sequence.clone());

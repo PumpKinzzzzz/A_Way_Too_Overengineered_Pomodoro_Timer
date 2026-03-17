@@ -1,5 +1,5 @@
-use super::types::Sequence;
 use super::settings::Settings;
+use super::types::Sequence;
 
 pub struct Timer {
     state: TimerState,
@@ -9,7 +9,7 @@ pub struct Timer {
     durations: (u64, u64, u64), // (work_duration, short_break_duration, long_break_duration)
 }
 
-enum TimerState {
+pub enum TimerState {
     Idle,
     Running(Sequence), // work, short break, or long break
     Paused,
@@ -18,12 +18,16 @@ enum TimerState {
 
 impl Timer {
     pub fn new(settings: &Settings) -> Self {
-        Timer { 
-            state: TimerState::Idle, 
-            current_cycle_index: 0, 
+        Timer {
+            state: TimerState::Idle,
+            current_cycle_index: 0,
             time_remaining: 0,
             sequence_list: settings.get_sequence_list().clone(),
-            durations: (settings.get_work_duration(), settings.get_short_break_duration(), settings.get_long_break_duration()),
+            durations: (
+                settings.get_work_duration(),
+                settings.get_short_break_duration(),
+                settings.get_long_break_duration(),
+            ),
         }
     }
 
@@ -92,19 +96,19 @@ impl Timer {
 fn test_timer() {
     let settings = Settings::new();
     let mut timer = Timer::new(&settings);
-    
+
     assert!(matches!(timer.state, TimerState::Idle));
-    
+
     timer.start();
     assert!(matches!(timer.state, TimerState::Running(Sequence::Work)));
     assert_eq!(timer.time_remaining, settings.get_work_duration() * 60);
-    
+
     timer.pause();
     assert!(matches!(timer.state, TimerState::Paused));
-    
+
     timer.resume();
     assert!(matches!(timer.state, TimerState::Running(Sequence::Work)));
-    
+
     timer.reset();
     assert!(matches!(timer.state, TimerState::Idle));
 }

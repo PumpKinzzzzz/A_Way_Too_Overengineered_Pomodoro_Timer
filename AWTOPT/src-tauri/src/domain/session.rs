@@ -4,9 +4,19 @@ pub struct Session {
     date: String,
 }
 
+impl Default for Session {
+    fn default() -> Self {
+        Session::new()
+    }
+}
+
 impl Session {
     pub fn new() -> Self {
-        Session { time_elapsed: 0, completed_cycles: 0, date: String::new() }
+        Session {
+            time_elapsed: 0,
+            completed_cycles: 0,
+            date: String::new(),
+        }
     }
 
     pub fn update_time_elapsed(&mut self, time: u64) {
@@ -15,6 +25,22 @@ impl Session {
 
     pub fn increment_completed_cycles(&mut self) {
         self.completed_cycles += 1;
+    }
+
+    pub fn get_time_elapsed(&self) -> u64 {
+        self.time_elapsed
+    }
+
+    pub fn get_completed_cycles(&self) -> usize {
+        self.completed_cycles
+    }
+
+    pub fn get_date(&self) -> &str {
+        &self.date
+    }
+
+    pub fn set_date(&mut self, date: String) {
+        self.date = date;
     }
 }
 

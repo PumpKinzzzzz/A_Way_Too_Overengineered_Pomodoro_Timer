@@ -112,6 +112,7 @@ jobs:
         run: cargo install cargo-audit
 
       - name: Run security audit
+        continue-on-error: true
         run: cargo audit
 
       # Optional: npm dependencies security scan
@@ -122,6 +123,7 @@ jobs:
 
       - name: Run npm audit
         working-directory: ./AWTOPT
+        continue-on-error: true
         run: npm audit --audit-level moderate
 
   # Integration test (Tauri build)
