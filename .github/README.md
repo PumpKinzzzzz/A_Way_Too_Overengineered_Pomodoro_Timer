@@ -131,6 +131,13 @@ CHANGELOG.md            # Version notes
 
 ## Common troubleshooting
 
+### **CI fails on system dependencies** 
+```bash
+# Workflows automatically install these packages on Ubuntu:
+sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev librsvg2-dev libglib2.0-dev
+# macOS and Windows: no additional dependencies required
+```
+
 ### **Release workflow doesn't trigger**
 - Check tag format: `v1.0.0` (with 'v')  
 - Tag pushed: `git push origin v1.0.0`
