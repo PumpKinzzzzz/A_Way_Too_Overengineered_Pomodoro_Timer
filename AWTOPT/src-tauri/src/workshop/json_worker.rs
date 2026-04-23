@@ -32,13 +32,13 @@ impl JsonTrait for JsonWorker {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::contracts::{JsonTrait, UpdateSettingsRequest};
+    use crate::contracts::{JsonTrait, SettingsUpdateDto};
 
     #[test]
     fn test_json_worker() {
         let worker = JsonWorker::new();
 
-        let request = UpdateSettingsRequest {
+        let request = SettingsUpdateDto {
             work_duration: Some(30),
             short_break_duration: Some(10),
             long_break_duration: None,
@@ -51,7 +51,7 @@ mod tests {
         assert!(json.contains("30"));
 
         // Deserialize
-        let restored: UpdateSettingsRequest = worker.from_json(&json).unwrap();
+        let restored: SettingsUpdateDto = worker.from_json(&json).unwrap();
         assert_eq!(restored.work_duration, Some(30));
         assert_eq!(restored.short_break_duration, Some(10));
     }

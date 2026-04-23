@@ -16,26 +16,14 @@ pub enum TimerStateDto {
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct StartTimerRequest {}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct PauseTimerRequest {}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct ResumeTimerRequest {}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct ResetTimerRequest {}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct TimerStatusResponse {
+pub struct TimerStatusDto {
     pub state: TimerStateDto,
     pub time_remaining: u64,
     pub current_cycle: usize,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct UpdateSettingsRequest {
+pub struct SettingsUpdateDto {
     pub work_duration: Option<u64>,
     pub short_break_duration: Option<u64>,
     pub long_break_duration: Option<u64>,
@@ -44,7 +32,7 @@ pub struct UpdateSettingsRequest {
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct SettingsResponse {
+pub struct SettingsDto {
     pub work_duration: u64,
     pub short_break_duration: u64,
     pub long_break_duration: u64,
@@ -53,18 +41,18 @@ pub struct SettingsResponse {
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct SessionStatsResponse {
+pub struct SessionStatsDto {
     pub time_elapsed: u64,
     pub completed_cycles: usize,
     pub date: String,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct SuccessResponse {
+pub struct SuccessDto {
     pub message: String,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct ErrorResponse {
+pub struct ErrorDto {
     pub error: String,
 }

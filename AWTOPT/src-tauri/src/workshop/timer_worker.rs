@@ -1,5 +1,5 @@
 use super::types::Sequence;
-use crate::contracts::{SequenceType, TimerStateDto, TimerStatusResponse};
+use crate::contracts::{SequenceType, TimerStateDto, TimerStatusDto};
 
 pub struct Timer {
     state: TimerState,
@@ -195,29 +195,29 @@ impl TimerWorker {
         }
     }
 
-    pub fn start(&mut self) -> Result<TimerStatusResponse, String> {
+    pub fn start(&mut self) -> Result<TimerStatusDto, String> {
         self.timer.start();
         self.current_cycle_index = 0;
         Ok(self.get_status())
     }
 
-    pub fn pause(&mut self) -> Result<TimerStatusResponse, String> {
+    pub fn pause(&mut self) -> Result<TimerStatusDto, String> {
         self.timer.pause();
         Ok(self.get_status())
     }
 
-    pub fn resume(&mut self) -> Result<TimerStatusResponse, String> {
+    pub fn resume(&mut self) -> Result<TimerStatusDto, String> {
         self.timer.resume();
         Ok(self.get_status())
     }
 
-    pub fn reset(&mut self) -> Result<TimerStatusResponse, String> {
+    pub fn reset(&mut self) -> Result<TimerStatusDto, String> {
         self.timer.reset();
         self.current_cycle_index = 0;
         Ok(self.get_status())
     }
 
-    pub fn tick(&mut self) -> Result<TimerStatusResponse, String> {
+    pub fn tick(&mut self) -> Result<TimerStatusDto, String> {
         let was_running = matches!(self.timer.get_state(), TimerState::Running(_));
         let time_before = self.timer.get_time_remaining();
 
@@ -230,8 +230,8 @@ impl TimerWorker {
         Ok(self.get_status())
     }
 
-    pub fn get_status(&self) -> TimerStatusResponse {
-        TimerStatusResponse {
+    pub fn get_status(&self) -> TimerStatusDto {
+        TimerStatusDto {
             state: Self::state_to_dto(self.timer.get_state()),
             time_remaining: self.timer.get_time_remaining(),
             current_cycle: self.current_cycle_index,

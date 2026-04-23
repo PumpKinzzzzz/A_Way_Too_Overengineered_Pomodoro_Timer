@@ -11,9 +11,9 @@ pub trait NotifierTrait {
 }
 
 pub trait PersistenceTrait {
-    fn save_settings(&self, settings: &SettingsResponse) -> Result<(), String>;
-    fn load_settings(&self) -> Result<SettingsResponse, String>;
-    fn save_session(&self, session: &SessionStatsResponse) -> Result<(), String>;
+    fn save_settings(&self, settings: &SettingsDto) -> Result<(), String>;
+    fn load_settings(&self) -> Result<SettingsDto, String>;
+    fn save_session(&self, session: &SessionStatsDto) -> Result<(), String>;
 }
 
 pub trait SchedulerTrait {

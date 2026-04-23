@@ -1,4 +1,4 @@
-use crate::contracts::SessionStatsResponse;
+use crate::contracts::SessionStatsDto;
 
 pub struct Session {
     time_elapsed: u64,
@@ -69,8 +69,8 @@ impl SessionWorker {
         self.session.increment_completed_cycles();
     }
 
-    pub fn get_stats(&self) -> SessionStatsResponse {
-        SessionStatsResponse {
+    pub fn get_stats(&self) -> SessionStatsDto {
+        SessionStatsDto {
             time_elapsed: self.session.get_time_elapsed(),
             completed_cycles: self.session.get_completed_cycles(),
             date: self.session.get_date().to_string(),

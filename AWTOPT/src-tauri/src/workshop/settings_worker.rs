@@ -1,6 +1,6 @@
 use super::timer_worker::Settings;
 use super::types::Sequence;
-use crate::contracts::{SequenceType, SettingsResponse, UpdateSettingsRequest};
+use crate::contracts::{SequenceType, SettingsDto, SettingsUpdateDto};
 
 pub struct SettingsWorker {
     settings: Settings,
@@ -37,10 +37,7 @@ impl SettingsWorker {
         }
     }
 
-    pub fn update_settings(
-        &mut self,
-        request: UpdateSettingsRequest,
-    ) -> Result<SettingsResponse, String> {
+    pub fn update_settings(&mut self, request: SettingsUpdateDto) -> Result<SettingsDto, String> {
         if let Some(duration) = request.work_duration {
             self.settings.update_work_duration(duration);
         }
@@ -68,8 +65,8 @@ impl SettingsWorker {
         Ok(self.get_settings())
     }
 
-    pub fn get_settings(&self) -> SettingsResponse {
-        SettingsResponse {
+    pub fn get_settings(&self) -> SettingsDto {
+        SettingsDto {
             work_duration: self.settings.get_work_duration(),
             short_break_duration: self.settings.get_short_break_duration(),
             long_break_duration: self.settings.get_long_break_duration(),
@@ -98,7 +95,7 @@ mod tests {
     fn test_settings_worker_update() {
         let mut worker = SettingsWorker::new();
 
-        let request = UpdateSettingsRequest {
+        let request = SettingsUpdateDto {
             work_duration: Some(30),
             short_break_duration: Some(10),
             long_break_duration: None,

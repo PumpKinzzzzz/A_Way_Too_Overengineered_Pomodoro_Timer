@@ -20,11 +20,7 @@ impl PomodoroOrchestrator {
         }
     }
 
-    /// Handle start timer request
-    pub fn handle_start_timer(
-        &mut self,
-        _request: StartTimerRequest,
-    ) -> Result<TimerStatusResponse, String> {
+    pub fn handle_start_timer(&mut self) -> Result<TimerStatusDto, String> {
         // Start the timer
         let response = self.timer_worker.start()?;
 
@@ -34,11 +30,7 @@ impl PomodoroOrchestrator {
         Ok(response)
     }
 
-    /// Handle pause timer request
-    pub fn handle_pause_timer(
-        &mut self,
-        _request: PauseTimerRequest,
-    ) -> Result<TimerStatusResponse, String> {
+    pub fn handle_pause_timer(&mut self) -> Result<TimerStatusDto, String> {
         // Pause the timer
         let response = self.timer_worker.pause()?;
 
@@ -48,11 +40,7 @@ impl PomodoroOrchestrator {
         Ok(response)
     }
 
-    /// Handle resume timer request
-    pub fn handle_resume_timer(
-        &mut self,
-        _request: ResumeTimerRequest,
-    ) -> Result<TimerStatusResponse, String> {
+    pub fn handle_resume_timer(&mut self) -> Result<TimerStatusDto, String> {
         // Resume the timer
         let response = self.timer_worker.resume()?;
 
@@ -62,11 +50,7 @@ impl PomodoroOrchestrator {
         Ok(response)
     }
 
-    /// Handle reset timer request
-    pub fn handle_reset_timer(
-        &mut self,
-        _request: ResetTimerRequest,
-    ) -> Result<TimerStatusResponse, String> {
+    pub fn handle_reset_timer(&mut self) -> Result<TimerStatusDto, String> {
         // Reset the timer
         let response = self.timer_worker.reset()?;
 
@@ -76,8 +60,7 @@ impl PomodoroOrchestrator {
         Ok(response)
     }
 
-    /// Handle tick (called by scheduler)
-    pub fn handle_tick(&mut self) -> Result<TimerStatusResponse, String> {
+    pub fn handle_tick(&mut self) -> Result<TimerStatusDto, String> {
         // Get status before tick
         let status_before = self.timer_worker.get_status();
 
@@ -102,11 +85,10 @@ impl PomodoroOrchestrator {
         Ok(response)
     }
 
-    /// Handle update settings request
     pub fn handle_update_settings(
         &mut self,
-        request: UpdateSettingsRequest,
-    ) -> Result<SettingsResponse, String> {
+        request: SettingsUpdateDto,
+    ) -> Result<SettingsDto, String> {
         let response = self.settings_worker.update_settings(request)?;
 
         // TODO: Persist settings
@@ -116,17 +98,16 @@ impl PomodoroOrchestrator {
     }
 
     /// Handle get settings request
-    pub fn handle_get_settings(&self) -> SettingsResponse {
+    pub fn handle_get_settings(&self) -> SettingsDto {
         self.settings_worker.get_settings()
     }
 
     /// Handle get timer status request
-    pub fn handle_get_timer_status(&self) -> TimerStatusResponse {
+    pub fn handle_get_timer_status(&self) -> TimerStatusDto {
         self.timer_worker.get_status()
     }
 
-    /// Handle get session stats request
-    pub fn handle_get_session_stats(&self) -> SessionStatsResponse {
+    pub fn handle_get_session_stats(&self) -> SessionStatsDto {
         self.session_worker.get_stats()
     }
 }
@@ -146,27 +127,19 @@ mod tests {
         let mut orchestrator = PomodoroOrchestrator::new();
 
         // Start timer
-        let response = orchestrator
-            .handle_start_timer(StartTimerRequest {})
-            .unwrap();
+        let response = orchestrator.handle_start_timer().unwrap();
         assert!(matches!(response.state, TimerStateDto::Running { .. }));
 
         // Pause timer
-        let response = orchestrator
-            .handle_pause_timer(PauseTimerRequest {})
-            .unwrap();
+        let response = orchestrator.handle_pause_timer().unwrap();
         assert_eq!(response.state, TimerStateDto::Paused);
 
         // Resume timer
-        let response = orchestrator
-            .handle_resume_timer(ResumeTimerRequest {})
-            .unwrap();
+        let response = orchestrator.handle_resume_timer().unwrap();
         assert!(matches!(response.state, TimerStateDto::Running { .. }));
 
         // Reset timer
-        let response = orchestrator
-            .handle_reset_timer(ResetTimerRequest {})
-            .unwrap();
+        let response = orchestrator.handle_reset_timer().unwrap();
         assert_eq!(response.state, TimerStateDto::Idle);
     }
 
@@ -174,7 +147,7 @@ mod tests {
     fn test_orchestrator_settings() {
         let mut orchestrator = PomodoroOrchestrator::new();
 
-        let request = UpdateSettingsRequest {
+        let request = SettingsUpdateDto {
             work_duration: Some(30),
             short_break_duration: None,
             long_break_duration: None,
