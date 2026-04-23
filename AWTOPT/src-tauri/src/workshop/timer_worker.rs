@@ -1,22 +1,17 @@
-// Peter the Timer: Specialized worker for timer operations
 use super::types::Sequence;
 use crate::contracts::{SequenceType, TimerStateDto, TimerStatusResponse};
-
-// ============================================================================
-// Internal Timer Model
-// ============================================================================
 
 pub struct Timer {
     state: TimerState,
     current_cycle_index: usize,
     time_remaining: u64,
     sequence_list: Vec<Sequence>,
-    durations: (u64, u64, u64), // (work_duration, short_break_duration, long_break_duration)
+    durations: (u64, u64, u64),
 }
 
 pub enum TimerState {
     Idle,
-    Running(Sequence), // work, short break, or long break
+    Running(Sequence),
     Paused,
     Completed,
 }
@@ -97,10 +92,6 @@ impl Timer {
     }
 }
 
-// ============================================================================
-// Settings (needed by Timer)
-// ============================================================================
-
 pub struct Settings {
     work_duration: u64,
     short_break_duration: u64,
@@ -172,11 +163,6 @@ impl Settings {
     }
 }
 
-// ============================================================================
-// TimerWorker - The Worker that uses Timer
-// ============================================================================
-
-/// TimerWorker: Executes timer-related operations
 pub struct TimerWorker {
     timer: Timer,
     current_cycle_index: usize,
@@ -190,7 +176,6 @@ impl TimerWorker {
         }
     }
 
-    /// Convert domain TimerState to DTO
     fn state_to_dto(state: &TimerState) -> TimerStateDto {
         match state {
             TimerState::Idle => TimerStateDto::Idle,
@@ -202,7 +187,6 @@ impl TimerWorker {
         }
     }
 
-    /// Convert domain Sequence to DTO
     fn sequence_to_dto(seq: &Sequence) -> SequenceType {
         match seq {
             Sequence::Work => SequenceType::Work,
@@ -234,13 +218,11 @@ impl TimerWorker {
     }
 
     pub fn tick(&mut self) -> Result<TimerStatusResponse, String> {
-        // Check if we're completing a cycle before ticking
         let was_running = matches!(self.timer.get_state(), TimerState::Running(_));
         let time_before = self.timer.get_time_remaining();
 
         self.timer.tick();
 
-        // If time went from 1 to 0, we completed a cycle
         if was_running && time_before == 1 && self.timer.get_time_remaining() != 0 {
             self.current_cycle_index += 1;
         }
@@ -256,10 +238,6 @@ impl TimerWorker {
         }
     }
 }
-
-// ============================================================================
-// Tests
-// ============================================================================
 
 #[cfg(test)]
 mod tests {

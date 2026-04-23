@@ -1,9 +1,6 @@
-// Johnny the JSON: Specialized worker for JSON operations
 use crate::contracts::JsonTrait;
 use crate::warehouse::SerdeJsonTool;
 
-/// JsonWorker: Handles JSON serialization/deserialization
-/// Uses the SerdeJsonTool from the warehouse
 pub struct JsonWorker {
     tool: SerdeJsonTool,
 }

@@ -1,4 +1,3 @@
-// The Workshop: Specialized workers execute manual labor
 pub mod json_worker;
 pub mod session_worker;
 pub mod settings_worker;

@@ -1,13 +1,7 @@
-// Mary the Settings: Specialized worker for settings operations
-use super::timer_worker::Settings; // Settings is now in timer_worker
+use super::timer_worker::Settings;
 use super::types::Sequence;
 use crate::contracts::{SequenceType, SettingsResponse, UpdateSettingsRequest};
 
-// ============================================================================
-// SettingsWorker - The Worker that uses Settings
-// ============================================================================
-
-/// SettingsWorker: Executes settings-related operations
 pub struct SettingsWorker {
     settings: Settings,
 }
@@ -27,7 +21,6 @@ impl SettingsWorker {
         &self.settings
     }
 
-    /// Convert domain Sequence to DTO
     fn sequence_to_dto(seq: &Sequence) -> SequenceType {
         match seq {
             Sequence::Work => SequenceType::Work,
@@ -36,7 +29,6 @@ impl SettingsWorker {
         }
     }
 
-    /// Convert DTO Sequence to domain
     fn dto_to_sequence(seq: &SequenceType) -> Sequence {
         match seq {
             SequenceType::Work => Sequence::Work,
@@ -49,29 +41,24 @@ impl SettingsWorker {
         &mut self,
         request: UpdateSettingsRequest,
     ) -> Result<SettingsResponse, String> {
-        // Update work duration if provided
         if let Some(duration) = request.work_duration {
             self.settings.update_work_duration(duration);
         }
 
-        // Update short break duration if provided
         if let Some(duration) = request.short_break_duration {
             self.settings.update_short_break_duration(duration);
         }
 
-        // Update long break duration if provided
         if let Some(duration) = request.long_break_duration {
             self.settings.update_long_break_duration(duration);
         }
 
-        // Toggle auto start breaks if provided
         if let Some(auto_start) = request.auto_start_breaks {
             if auto_start != self.settings.is_auto_start_breaks() {
                 self.settings.toggle_auto_start_breaks();
             }
         }
 
-        // Update sequence list if provided
         if let Some(sequence_list) = request.sequence_list {
             let domain_sequences: Vec<Sequence> =
                 sequence_list.iter().map(Self::dto_to_sequence).collect();

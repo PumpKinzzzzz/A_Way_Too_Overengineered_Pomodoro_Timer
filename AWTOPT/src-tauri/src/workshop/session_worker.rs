@@ -1,9 +1,4 @@
-// Steve the Session: Specialized worker for session tracking operations
 use crate::contracts::SessionStatsResponse;
-
-// ============================================================================
-// Internal Session Model
-// ============================================================================
 
 pub struct Session {
     time_elapsed: u64,
@@ -51,11 +46,6 @@ impl Session {
     }
 }
 
-// ============================================================================
-// SessionWorker - The Worker that uses Session
-// ============================================================================
-
-/// SessionWorker: Executes session tracking operations
 pub struct SessionWorker {
     session: Session,
 }
@@ -97,10 +87,6 @@ impl Default for SessionWorker {
         Self::new()
     }
 }
-
-// ============================================================================
-// Tests
-// ============================================================================
 
 #[cfg(test)]
 mod tests {
