@@ -1,6 +1,11 @@
 // Mary the Settings: Specialized worker for settings operations
-use super::models::{Sequence, Settings};
+use super::timer_worker::Settings; // Settings is now in timer_worker
+use super::types::Sequence;
 use crate::contracts::{SequenceType, SettingsResponse, UpdateSettingsRequest};
+
+// ============================================================================
+// SettingsWorker - The Worker that uses Settings
+// ============================================================================
 
 /// SettingsWorker: Executes settings-related operations
 pub struct SettingsWorker {
