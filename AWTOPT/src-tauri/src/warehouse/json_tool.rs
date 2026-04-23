@@ -8,12 +8,11 @@ impl SerdeJsonTool {
         SerdeJsonTool
     }
 
-    pub fn to_json<T: Serialize>(value: &T) -> Result<String, String> {
+    pub fn to_json<T: Serialize>(&self, value: &T) -> Result<String, String> {
         serde_json::to_string(value).map_err(|e| format!("Serialization error: {}", e))
     }
 
-
-    pub fn from_json<T: for<'de> Deserialize<'de>>(json: &str) -> Result<T, String> {
+    pub fn from_json<T: for<'de> Deserialize<'de>>(&self, json: &str) -> Result<T, String> {
         serde_json::from_str(json).map_err(|e| format!("Deserialization error: {}", e))
     }
 }
@@ -37,13 +36,14 @@ mod tests {
 
     #[test]
     fn test_serialize_deserialize() {
+        let tool = SerdeJsonTool::new();
         let data = TestData {
             name: "test".to_string(),
             value: 42,
         };
 
-        let json = SerdeJsonTool::to_json(&data).unwrap();
-        let restored: TestData = SerdeJsonTool::from_json(&json).unwrap();
+        let json = tool.to_json(&data).unwrap();
+        let restored: TestData = tool.from_json(&json).unwrap();
 
         assert_eq!(data, restored);
     }

@@ -1,6 +1,6 @@
 // Peter the Timer: Specialized worker for timer operations
+use super::models::{Sequence, Settings, Timer, TimerState};
 use crate::contracts::{SequenceType, TimerStateDto, TimerStatusResponse};
-use super::models::{Settings, Timer, TimerState, Sequence};
 
 /// TimerWorker: Executes timer-related operations
 pub struct TimerWorker {
@@ -63,14 +63,14 @@ impl TimerWorker {
         // Check if we're completing a cycle before ticking
         let was_running = matches!(self.timer.get_state(), TimerState::Running(_));
         let time_before = self.timer.get_time_remaining();
-        
+
         self.timer.tick();
-        
+
         // If time went from 1 to 0, we completed a cycle
         if was_running && time_before == 1 && self.timer.get_time_remaining() != 0 {
             self.current_cycle_index += 1;
         }
-        
+
         Ok(self.get_status())
     }
 
@@ -111,10 +111,7 @@ mod tests {
 
         // Resume
         let status = worker.resume().unwrap();
-        assert!(matches!(
-            status.state,
-            TimerStateDto::Running { .. }
-        ));
+        assert!(matches!(status.state, TimerStateDto::Running { .. }));
 
         // Reset
         let status = worker.reset().unwrap();

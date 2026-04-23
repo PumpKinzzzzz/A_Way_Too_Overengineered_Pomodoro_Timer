@@ -2,6 +2,7 @@
 use super::dtos::*;
 
 /// Trait for JSON serialization/deserialization (warehouse tool)
+#[allow(clippy::wrong_self_convention)]
 pub trait JsonTrait {
     fn to_json<T: serde::Serialize>(&self, value: &T) -> Result<String, String>;
     fn from_json<T: for<'de> serde::Deserialize<'de>>(&self, json: &str) -> Result<T, String>;

@@ -2,9 +2,9 @@
 
 // The new architecture layers
 pub mod contracts; // The Architects: Blueprints (DTOs) and Common Language (Traits)
+pub mod desk;
 pub mod warehouse; // The Keepers: External tools (crates) that match the blueprints
-pub mod workshop;  // The Workers: Specialized workers + their internal models
-pub mod desk;      // The Office: Orchestration only
+pub mod workshop; // The Workers: Specialized workers + their internal models // The Office: Orchestration only
 
 #[tauri::command]
 fn greet(name: &str) -> String {

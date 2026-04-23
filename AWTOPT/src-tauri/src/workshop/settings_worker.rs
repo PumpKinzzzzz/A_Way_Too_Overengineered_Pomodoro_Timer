@@ -1,6 +1,6 @@
 // Mary the Settings: Specialized worker for settings operations
+use super::models::{Sequence, Settings};
 use crate::contracts::{SequenceType, SettingsResponse, UpdateSettingsRequest};
-use super::models::{Settings, Sequence};
 
 /// SettingsWorker: Executes settings-related operations
 pub struct SettingsWorker {
@@ -40,7 +40,10 @@ impl SettingsWorker {
         }
     }
 
-    pub fn update_settings(&mut self, request: UpdateSettingsRequest) -> Result<SettingsResponse, String> {
+    pub fn update_settings(
+        &mut self,
+        request: UpdateSettingsRequest,
+    ) -> Result<SettingsResponse, String> {
         // Update work duration if provided
         if let Some(duration) = request.work_duration {
             self.settings.update_work_duration(duration);
@@ -65,10 +68,8 @@ impl SettingsWorker {
 
         // Update sequence list if provided
         if let Some(sequence_list) = request.sequence_list {
-            let domain_sequences: Vec<Sequence> = sequence_list
-                .iter()
-                .map(Self::dto_to_sequence)
-                .collect();
+            let domain_sequences: Vec<Sequence> =
+                sequence_list.iter().map(Self::dto_to_sequence).collect();
             self.settings.update_sequence_list(domain_sequences);
         }
 
@@ -124,7 +125,7 @@ mod tests {
     fn test_settings_worker_get() {
         let worker = SettingsWorker::new();
         let settings = worker.get_settings();
-        
+
         assert_eq!(settings.work_duration, 25);
         assert_eq!(settings.short_break_duration, 5);
         assert_eq!(settings.long_break_duration, 15);

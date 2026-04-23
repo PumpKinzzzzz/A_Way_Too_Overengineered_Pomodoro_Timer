@@ -24,11 +24,11 @@ impl Default for JsonWorker {
 
 impl JsonTrait for JsonWorker {
     fn to_json<T: serde::Serialize>(&self, value: &T) -> Result<String, String> {
-        SerdeJsonTool::to_json(value)
+        self.tool.to_json(value)
     }
 
     fn from_json<T: for<'de> serde::Deserialize<'de>>(&self, json: &str) -> Result<T, String> {
-        SerdeJsonTool::from_json(json)
+        self.tool.from_json(json)
     }
 }
 

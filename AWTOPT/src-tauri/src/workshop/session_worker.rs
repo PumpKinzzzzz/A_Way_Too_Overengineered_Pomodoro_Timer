@@ -1,6 +1,6 @@
 // Steve the Session: Specialized worker for session tracking operations
-use crate::contracts::SessionStatsResponse;
 use super::models::Session;
+use crate::contracts::SessionStatsResponse;
 
 /// SessionWorker: Executes session tracking operations
 pub struct SessionWorker {
