@@ -1,8 +1,6 @@
-// The Foreman: Orchestrates the sequence of Workers
 use crate::contracts::*;
 use crate::workshop::{SessionWorker, SettingsWorker, TimerWorker};
 
-/// PomodoroOrchestrator: Directs workers to accomplish complex tasks
 pub struct PomodoroOrchestrator {
     timer_worker: TimerWorker,
     settings_worker: SettingsWorker,

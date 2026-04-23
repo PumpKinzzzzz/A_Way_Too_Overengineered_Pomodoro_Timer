@@ -1,7 +1,5 @@
-// DTOs: The blueprints that circulate between layers
 use serde::{Deserialize, Serialize};
 
-/// Sequence types for the Pomodoro timer
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum SequenceType {
     Work,
@@ -9,7 +7,6 @@ pub enum SequenceType {
     LongBreak,
 }
 
-/// Timer state representation
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum TimerStateDto {
     Idle,
@@ -18,23 +15,18 @@ pub enum TimerStateDto {
     Completed,
 }
 
-/// Request to start the timer
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct StartTimerRequest {}
 
-/// Request to pause the timer
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct PauseTimerRequest {}
 
-/// Request to resume the timer
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ResumeTimerRequest {}
 
-/// Request to reset the timer
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ResetTimerRequest {}
 
-/// Response containing timer status
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct TimerStatusResponse {
     pub state: TimerStateDto,
@@ -42,7 +34,6 @@ pub struct TimerStatusResponse {
     pub current_cycle: usize,
 }
 
-/// Request to update settings
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct UpdateSettingsRequest {
     pub work_duration: Option<u64>,
@@ -52,7 +43,6 @@ pub struct UpdateSettingsRequest {
     pub sequence_list: Option<Vec<SequenceType>>,
 }
 
-/// Response containing current settings
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct SettingsResponse {
     pub work_duration: u64,
@@ -62,7 +52,6 @@ pub struct SettingsResponse {
     pub sequence_list: Vec<SequenceType>,
 }
 
-/// Response containing session statistics
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct SessionStatsResponse {
     pub time_elapsed: u64,
@@ -70,13 +59,11 @@ pub struct SessionStatsResponse {
     pub date: String,
 }
 
-/// Generic success response
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct SuccessResponse {
     pub message: String,
 }
 
-/// Generic error response
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ErrorResponse {
     pub error: String,
