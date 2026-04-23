@@ -1,3 +1,4 @@
+// Internal domain models used by workers
 pub mod session;
 pub mod settings;
 pub mod timer;
