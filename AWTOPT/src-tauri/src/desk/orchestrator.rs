@@ -97,12 +97,10 @@ impl PomodoroOrchestrator {
         Ok(response)
     }
 
-    /// Handle get settings request
     pub fn handle_get_settings(&self) -> SettingsDto {
         self.settings_worker.get_settings()
     }
 
-    /// Handle get timer status request
     pub fn handle_get_timer_status(&self) -> TimerStatusDto {
         self.timer_worker.get_status()
     }
