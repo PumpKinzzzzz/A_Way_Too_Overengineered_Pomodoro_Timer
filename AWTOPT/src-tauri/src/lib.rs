@@ -3,7 +3,7 @@ pub mod desk;
 pub mod warehouse;
 pub mod workshop;
 
-use contracts::{SettingsDto, SettingsUpdateDto, SessionStatsDto, TimerStatusDto};
+use contracts::{SessionStatsDto, SettingsDto, SettingsUpdateDto, TimerStatusDto};
 use desk::PomodoroOrchestrator;
 use std::sync::Mutex;
 use tauri::{Manager, State};
