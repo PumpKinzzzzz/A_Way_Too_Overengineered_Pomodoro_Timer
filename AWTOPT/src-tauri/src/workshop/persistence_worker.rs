@@ -1,4 +1,4 @@
-use crate::contracts::AppState;
+use crate::contracts::AppSave;
 use crate::warehouse::PersistenceTool;
 
 pub struct PersistenceWorker {
@@ -10,11 +10,11 @@ impl PersistenceWorker {
         Self { tool }
     }
 
-    pub fn save_app_state(&self, state: &AppState) -> Result<(), String> {
+    pub fn save_app_state(&self, state: &AppSave) -> Result<(), String> {
         self.tool.save_state(state)
     }
 
-    pub fn load_app_state(&self) -> Result<AppState, String> {
+    pub fn load_app_state(&self) -> Result<AppSave, String> {
         self.tool.load_state()
     }
 

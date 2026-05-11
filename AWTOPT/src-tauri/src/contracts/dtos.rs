@@ -57,9 +57,8 @@ pub struct ErrorDto {
     pub error: String,
 }
 
-/// Complete application state for persistence
 #[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct AppState {
+pub struct AppSave {
     pub settings: SettingsDto,
     pub timer_status: TimerStatusDto,
     pub session_stats: SessionStatsDto,

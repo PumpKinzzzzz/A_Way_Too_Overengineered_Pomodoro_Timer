@@ -17,6 +17,24 @@ impl SettingsWorker {
         Self { settings }
     }
 
+    pub fn from_save(save: SettingsDto) -> Self {
+        let sequence_list: Vec<Sequence> = save
+            .sequence_list
+            .iter()
+            .map(Self::dto_to_sequence)
+            .collect();
+
+        let settings = Settings {
+            work_duration: save.work_duration,
+            short_break_duration: save.short_break_duration,
+            long_break_duration: save.long_break_duration,
+            auto_start_breaks: save.auto_start_breaks,
+            sequence_list,
+        };
+
+        Self { settings }
+    }
+
     pub fn get_domain_settings(&self) -> &Settings {
         &self.settings
     }

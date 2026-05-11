@@ -1,11 +1,9 @@
-use crate::contracts::AppState;
-use crate::warehouse::SerdeJsonTool;
+use crate::contracts::AppSave;
 use std::fs;
 use std::path::PathBuf;
 use tauri::Manager;
 
 pub struct PersistenceTool {
-    json_tool: SerdeJsonTool,
     file_path: PathBuf,
 }
 
@@ -21,23 +19,22 @@ impl PersistenceTool {
 
         let file_path = app_data_dir.join("pomodoro_state.json");
 
-        Ok(Self {
-            json_tool: SerdeJsonTool::new(),
-            file_path,
-        })
+        Ok(Self { file_path })
     }
 
-    pub fn save_state(&self, state: &AppState) -> Result<(), String> {
-        let json = self.json_tool.to_json(state)?;
+    pub fn save_state(&self, state: &AppSave) -> Result<(), String> {
+        let json = serde_json::to_string_pretty(state)
+            .map_err(|e| format!("Failed to serialize state: {}", e))?;
         fs::write(&self.file_path, json)
             .map_err(|e| format!("Failed to write state file: {}", e))?;
         Ok(())
     }
 
-    pub fn load_state(&self) -> Result<AppState, String> {
+    pub fn load_state(&self) -> Result<AppSave, String> {
         let json = fs::read_to_string(&self.file_path)
             .map_err(|e| format!("Failed to read state file: {}", e))?;
-        let state = self.json_tool.from_json(&json)?;
+        let state = serde_json::from_str(&json)
+            .map_err(|e| format!("Failed to deserialize state: {}", e))?;
         Ok(state)
     }
 
@@ -65,8 +62,8 @@ mod tests {
         SequenceType, SessionStatsDto, SettingsDto, TimerStateDto, TimerStatusDto,
     };
 
-    fn create_test_state() -> AppState {
-        AppState {
+    fn create_test_state() -> AppSave {
+        AppSave {
             settings: SettingsDto {
                 work_duration: 25,
                 short_break_duration: 5,
@@ -94,11 +91,10 @@ mod tests {
 
     #[test]
     fn test_state_serialization() {
-        let json_tool = SerdeJsonTool::new();
         let state = create_test_state();
 
-        let json = json_tool.to_json(&state).unwrap();
-        let restored: AppState = json_tool.from_json(&json).unwrap();
+        let json = serde_json::to_string(&state).unwrap();
+        let restored: AppSave = serde_json::from_str(&json).unwrap();
 
         assert_eq!(
             state.settings.work_duration,
