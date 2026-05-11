@@ -21,40 +21,36 @@ impl PomodoroOrchestrator {
     }
 
     pub fn handle_start_timer(&mut self) -> Result<TimerStatusDto, String> {
-        // Start the timer
+        // Start the timer (frontend will call handle_tick every second)
         let response = self.timer_worker.start()?;
 
         // TODO: Notify user
-        // TODO: Start scheduler
 
         Ok(response)
     }
 
     pub fn handle_pause_timer(&mut self) -> Result<TimerStatusDto, String> {
-        // Pause the timer
+        // Pause the timer (frontend will stop calling handle_tick)
         let response = self.timer_worker.pause()?;
 
-        // TODO: Stop scheduler
         // TODO: Notify user
 
         Ok(response)
     }
 
     pub fn handle_resume_timer(&mut self) -> Result<TimerStatusDto, String> {
-        // Resume the timer
+        // Resume the timer (frontend will resume calling handle_tick)
         let response = self.timer_worker.resume()?;
 
-        // TODO: Start scheduler
         // TODO: Notify user
 
         Ok(response)
     }
 
     pub fn handle_reset_timer(&mut self) -> Result<TimerStatusDto, String> {
-        // Reset the timer
+        // Reset the timer (frontend will stop calling handle_tick)
         let response = self.timer_worker.reset()?;
 
-        // TODO: Stop scheduler
         // TODO: Notify user
 
         Ok(response)

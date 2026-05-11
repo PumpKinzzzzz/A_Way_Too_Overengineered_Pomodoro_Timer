@@ -13,7 +13,6 @@ impl TauriNotifierTool {
 
 impl NotifierTrait for TauriNotifierTool {
     fn notify(&self, title: &str, message: &str) {
-
         let _ = self
             .app_handle
             .notification()
