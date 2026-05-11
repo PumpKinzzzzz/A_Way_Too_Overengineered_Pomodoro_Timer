@@ -85,8 +85,20 @@ mod tests {
 
         let notifications = worker.tool.get_notifications();
         assert_eq!(notifications.len(), 3);
-        assert_eq!(notifications[0], ("Pomodoro".to_string(), "Work session started!".to_string()));
-        assert_eq!(notifications[1], ("Pomodoro".to_string(), "Work session completed!".to_string()));
-        assert_eq!(notifications[2], ("Pomodoro".to_string(), "Cycle 3 completed!".to_string()));
+        assert_eq!(
+            notifications[0],
+            ("Pomodoro".to_string(), "Work session started!".to_string())
+        );
+        assert_eq!(
+            notifications[1],
+            (
+                "Pomodoro".to_string(),
+                "Work session completed!".to_string()
+            )
+        );
+        assert_eq!(
+            notifications[2],
+            ("Pomodoro".to_string(), "Cycle 3 completed!".to_string())
+        );
     }
 }

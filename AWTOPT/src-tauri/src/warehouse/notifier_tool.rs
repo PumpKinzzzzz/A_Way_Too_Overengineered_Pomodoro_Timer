@@ -1,4 +1,5 @@
 use crate::contracts::NotifierTrait;
+use tauri_plugin_notification::NotificationExt;
 
 pub struct TauriNotifierTool {
     app_handle: tauri::AppHandle,
@@ -12,7 +13,6 @@ impl TauriNotifierTool {
 
 impl NotifierTrait for TauriNotifierTool {
     fn notify(&self, title: &str, message: &str) {
-        use tauri_plugin_notification::NotificationExt;
 
         let _ = self
             .app_handle
