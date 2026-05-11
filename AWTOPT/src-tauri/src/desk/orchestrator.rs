@@ -1,5 +1,5 @@
 use crate::contracts::*;
-use crate::warehouse::{PersistenceTool, TauriNotifierTool};
+use crate::warehouse::TauriNotifierTool;
 use crate::workshop::{
     NotifierWorker, PersistenceWorker, SessionWorker, SettingsWorker, TimerWorker,
 };
@@ -13,32 +13,20 @@ pub struct PomodoroOrchestrator {
 }
 
 impl PomodoroOrchestrator {
-    pub fn new(app_handle: tauri::AppHandle) -> Result<Self, String> {
-        let persistence_tool = PersistenceTool::new(&app_handle)?;
-        let persistence_worker = PersistenceWorker::new(persistence_tool);
-
-        let notifier_tool = TauriNotifierTool::new(app_handle);
-        let notifier_worker = NotifierWorker::new(notifier_tool);
-
-        let (settings_worker, session_worker) = if persistence_worker.has_saved_state() {
-            let state = persistence_worker.load_app_state()?;
-            (
-                SettingsWorker::from_save(state.settings),
-                SessionWorker::from_save(state.session_stats),
-            )
-        } else {
-            (SettingsWorker::new(), SessionWorker::new())
-        };
-
-        let timer_worker = TimerWorker::new(settings_worker.get_domain_settings());
-
-        Ok(Self {
+    pub fn new(
+        timer_worker: TimerWorker,
+        settings_worker: SettingsWorker,
+        session_worker: SessionWorker,
+        persistence_worker: PersistenceWorker,
+        notifier_worker: NotifierWorker<TauriNotifierTool>,
+    ) -> Self {
+        Self {
             timer_worker,
             settings_worker,
             session_worker,
             persistence_worker,
             notifier_worker,
-        })
+        }
     }
 
     fn save_current_state(&self) -> Result<(), String> {
@@ -52,7 +40,10 @@ impl PomodoroOrchestrator {
 
     pub fn handle_start_timer(&mut self) -> Result<TimerStatusDto, String> {
         let response = self.timer_worker.start()?;
-        if let TimerStateDto::Running { sequence: SequenceType::Work } = &response.state {
+        if let TimerStateDto::Running {
+            sequence: SequenceType::Work,
+        } = &response.state
+        {
             self.notifier_worker.notify_work_started();
         }
         Ok(response)
