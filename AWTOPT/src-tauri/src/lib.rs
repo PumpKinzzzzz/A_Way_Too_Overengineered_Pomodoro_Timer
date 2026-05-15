@@ -12,27 +12,42 @@ use workshop::{NotifierWorker, PersistenceWorker, SessionWorker, SettingsWorker,
 
 #[tauri::command]
 fn start_timer(state: State<Mutex<PomodoroOrchestrator>>) -> Result<TimerStatusDto, String> {
-    state.lock().unwrap().handle_start_timer()
+    state
+        .lock()
+        .map_err(|_| "Failed to acquire state lock".to_string())?
+        .handle_start_timer()
 }
 
 #[tauri::command]
 fn pause_timer(state: State<Mutex<PomodoroOrchestrator>>) -> Result<TimerStatusDto, String> {
-    state.lock().unwrap().handle_pause_timer()
+    state
+        .lock()
+        .map_err(|_| "Failed to acquire state lock".to_string())?
+        .handle_pause_timer()
 }
 
 #[tauri::command]
 fn resume_timer(state: State<Mutex<PomodoroOrchestrator>>) -> Result<TimerStatusDto, String> {
-    state.lock().unwrap().handle_resume_timer()
+    state
+        .lock()
+        .map_err(|_| "Failed to acquire state lock".to_string())?
+        .handle_resume_timer()
 }
 
 #[tauri::command]
 fn reset_timer(state: State<Mutex<PomodoroOrchestrator>>) -> Result<TimerStatusDto, String> {
-    state.lock().unwrap().handle_reset_timer()
+    state
+        .lock()
+        .map_err(|_| "Failed to acquire state lock".to_string())?
+        .handle_reset_timer()
 }
 
 #[tauri::command]
 fn tick(state: State<Mutex<PomodoroOrchestrator>>) -> Result<TimerStatusDto, String> {
-    state.lock().unwrap().handle_tick()
+    state
+        .lock()
+        .map_err(|_| "Failed to acquire state lock".to_string())?
+        .handle_tick()
 }
 
 #[tauri::command]
@@ -40,22 +55,34 @@ fn update_settings(
     state: State<Mutex<PomodoroOrchestrator>>,
     request: SettingsUpdateDto,
 ) -> Result<SettingsDto, String> {
-    state.lock().unwrap().handle_update_settings(request)
+    state
+        .lock()
+        .map_err(|_| "Failed to acquire state lock".to_string())?
+        .handle_update_settings(request)
 }
 
 #[tauri::command]
-fn get_settings(state: State<Mutex<PomodoroOrchestrator>>) -> SettingsDto {
-    state.lock().unwrap().handle_get_settings()
+fn get_settings(state: State<Mutex<PomodoroOrchestrator>>) -> Result<SettingsDto, String> {
+    state
+        .lock()
+        .map_err(|_| "Failed to acquire state lock".to_string())?
+        .handle_get_settings()
 }
 
 #[tauri::command]
-fn get_timer_status(state: State<Mutex<PomodoroOrchestrator>>) -> TimerStatusDto {
-    state.lock().unwrap().handle_get_timer_status()
+fn get_timer_status(state: State<Mutex<PomodoroOrchestrator>>) -> Result<TimerStatusDto, String> {
+    state
+        .lock()
+        .map_err(|_| "Failed to acquire state lock".to_string())?
+        .handle_get_timer_status()
 }
 
 #[tauri::command]
-fn get_session_stats(state: State<Mutex<PomodoroOrchestrator>>) -> SessionStatsDto {
-    state.lock().unwrap().handle_get_session_stats()
+fn get_session_stats(state: State<Mutex<PomodoroOrchestrator>>) -> Result<SessionStatsDto, String> {
+    state
+        .lock()
+        .map_err(|_| "Failed to acquire state lock".to_string())?
+        .handle_get_session_stats()
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]

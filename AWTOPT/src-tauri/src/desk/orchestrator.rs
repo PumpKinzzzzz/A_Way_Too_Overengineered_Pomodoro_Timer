@@ -101,15 +101,15 @@ impl PomodoroOrchestrator {
         Ok(response)
     }
 
-    pub fn handle_get_settings(&self) -> SettingsDto {
-        self.settings_worker.get_settings()
+    pub fn handle_get_settings(&self) -> Result<SettingsDto, String> {
+        Ok(self.settings_worker.get_settings())
     }
 
-    pub fn handle_get_timer_status(&self) -> TimerStatusDto {
-        self.timer_worker.get_status()
+    pub fn handle_get_timer_status(&self) -> Result<TimerStatusDto, String> {
+        Ok(self.timer_worker.get_status())
     }
 
-    pub fn handle_get_session_stats(&self) -> SessionStatsDto {
-        self.session_worker.get_stats()
+    pub fn handle_get_session_stats(&self) -> Result<SessionStatsDto, String> {
+        Ok(self.session_worker.get_stats())
     }
 }
