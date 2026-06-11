@@ -58,9 +58,7 @@ impl PersistenceTool {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::contracts::{
-        SequenceType, SessionStatsDto, SettingsDto, TimerStateDto, TimerStatusDto,
-    };
+    use crate::contracts::{SequenceType, SessionStatsDto, SettingsDto};
 
     fn create_test_state() -> AppSave {
         AppSave {
@@ -75,11 +73,6 @@ mod tests {
                     SequenceType::Work,
                     SequenceType::LongBreak,
                 ],
-            },
-            timer_status: TimerStatusDto {
-                state: TimerStateDto::Idle,
-                time_remaining: 0,
-                current_cycle: 0,
             },
             session_stats: SessionStatsDto {
                 time_elapsed: 0,
@@ -99,10 +92,6 @@ mod tests {
         assert_eq!(
             state.settings.work_duration,
             restored.settings.work_duration
-        );
-        assert_eq!(
-            state.timer_status.time_remaining,
-            restored.timer_status.time_remaining
         );
         assert_eq!(
             state.session_stats.completed_cycles,

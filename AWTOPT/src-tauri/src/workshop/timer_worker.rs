@@ -42,8 +42,20 @@ impl Timer {
     pub fn start(&mut self) {
         if let TimerState::Idle = self.state {
             self.current_cycle_index = 0;
-            self.time_remaining = self.durations.0 * 60;
+            if self.sequence_list.is_empty() {
+                self.sequence_list = vec![
+                    Sequence::Work,
+                    Sequence::ShortBreak,
+                    Sequence::Work,
+                    Sequence::LongBreak,
+                ];
+            }
             self.state = TimerState::Running(self.sequence_list[self.current_cycle_index]);
+            self.time_remaining = match self.sequence_list[self.current_cycle_index] {
+                Sequence::Work => self.durations.0 * 60,
+                Sequence::ShortBreak => self.durations.1 * 60,
+                Sequence::LongBreak => self.durations.2 * 60,
+            };
         }
     }
 

@@ -52,3 +52,7 @@ yarn-error.log*
 # GitHub Actions
 # ============================================
 .github/artifacts/
+
+# octerse
+.octerse/state.json
+.octerse/stats.jsonl

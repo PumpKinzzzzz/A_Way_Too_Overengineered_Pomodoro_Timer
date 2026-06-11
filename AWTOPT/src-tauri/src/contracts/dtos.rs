@@ -60,6 +60,5 @@ pub struct ErrorDto {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct AppSave {
     pub settings: SettingsDto,
-    pub timer_status: TimerStatusDto,
     pub session_stats: SessionStatsDto,
 }

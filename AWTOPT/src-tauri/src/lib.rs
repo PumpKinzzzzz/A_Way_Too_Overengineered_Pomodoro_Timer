@@ -98,11 +98,17 @@ pub fn run() {
             let notifier_worker = NotifierWorker::new(notifier_tool);
 
             let (settings_worker, session_worker) = if persistence_worker.has_saved_state() {
-                let state = persistence_worker.load_app_state()?;
-                (
-                    SettingsWorker::from_save(state.settings),
-                    SessionWorker::from_save(state.session_stats),
-                )
+                match persistence_worker.load_app_state() {
+                    Ok(state) => (
+                        SettingsWorker::from_save(state.settings),
+                        SessionWorker::from_save(state.session_stats),
+                    ),
+                    Err(e) => {
+                        eprintln!("Failed to load saved state: {}. Using defaults.", e);
+                        let _ = persistence_worker.clear_saved_state();
+                        (SettingsWorker::new(), SessionWorker::new())
+                    }
+                }
             } else {
                 (SettingsWorker::new(), SessionWorker::new())
             };

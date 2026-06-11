@@ -32,7 +32,6 @@ impl PomodoroOrchestrator {
     fn save_current_state(&self) -> Result<(), String> {
         let state = AppSave {
             settings: self.settings_worker.get_settings(),
-            timer_status: self.timer_worker.get_status(),
             session_stats: self.session_worker.get_stats(),
         };
         self.persistence_worker.save_app_state(&state)
@@ -40,10 +39,10 @@ impl PomodoroOrchestrator {
 
     pub fn handle_start_timer(&mut self) -> Result<TimerStatusDto, String> {
         let response = self.timer_worker.start()?;
-        if let TimerStateDto::Running {
-            sequence: SequenceType::Work,
-        } = &response.state
-        {
+        if !matches!(
+            response.state,
+            TimerStateDto::Idle | TimerStateDto::Paused | TimerStateDto::Completed
+        ) {
             self.notifier_worker.notify_work_started();
         }
         Ok(response)
