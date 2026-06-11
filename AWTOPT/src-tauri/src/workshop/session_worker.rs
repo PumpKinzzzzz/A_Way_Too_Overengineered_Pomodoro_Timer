@@ -1,9 +1,9 @@
 use crate::contracts::SessionStatsDto;
 
 pub struct Session {
-    time_elapsed: u64,
-    completed_cycles: usize,
-    date: String,
+    pub time_elapsed: u64,
+    pub completed_cycles: usize,
+    pub date: String,
 }
 
 impl Default for Session {
@@ -58,6 +58,15 @@ impl SessionWorker {
     }
 
     pub fn with_session(session: Session) -> Self {
+        Self { session }
+    }
+
+    pub fn from_save(save: SessionStatsDto) -> Self {
+        let session = Session {
+            time_elapsed: save.time_elapsed,
+            completed_cycles: save.completed_cycles,
+            date: save.date,
+        };
         Self { session }
     }
 

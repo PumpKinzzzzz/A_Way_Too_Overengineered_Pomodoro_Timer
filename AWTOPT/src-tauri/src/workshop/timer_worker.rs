@@ -42,8 +42,20 @@ impl Timer {
     pub fn start(&mut self) {
         if let TimerState::Idle = self.state {
             self.current_cycle_index = 0;
-            self.time_remaining = self.durations.0 * 60;
+            if self.sequence_list.is_empty() {
+                self.sequence_list = vec![
+                    Sequence::Work,
+                    Sequence::ShortBreak,
+                    Sequence::Work,
+                    Sequence::LongBreak,
+                ];
+            }
             self.state = TimerState::Running(self.sequence_list[self.current_cycle_index]);
+            self.time_remaining = match self.sequence_list[self.current_cycle_index] {
+                Sequence::Work => self.durations.0 * 60,
+                Sequence::ShortBreak => self.durations.1 * 60,
+                Sequence::LongBreak => self.durations.2 * 60,
+            };
         }
     }
 
@@ -93,11 +105,11 @@ impl Timer {
 }
 
 pub struct Settings {
-    work_duration: u64,
-    short_break_duration: u64,
-    long_break_duration: u64,
-    auto_start_breaks: bool,
-    sequence_list: Vec<Sequence>,
+    pub work_duration: u64,
+    pub short_break_duration: u64,
+    pub long_break_duration: u64,
+    pub auto_start_breaks: bool,
+    pub sequence_list: Vec<Sequence>,
 }
 
 impl Default for Settings {

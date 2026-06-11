@@ -56,3 +56,9 @@ pub struct SuccessDto {
 pub struct ErrorDto {
     pub error: String,
 }
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct AppSave {
+    pub settings: SettingsDto,
+    pub session_stats: SessionStatsDto,
+}
