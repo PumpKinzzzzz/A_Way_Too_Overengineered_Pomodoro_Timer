@@ -1,139 +1,26 @@
 # A Way Too Overengineered Pomodoro Timer
 
-An intentionally overengineered Pomodoro timer.
+A "getting good at a techno" kind of project. The goal was to learn Tauri and Rust and to make a self assesment of my own engineering skills. I wanted to challenge my SOLID principles and see how well I can apply them in a project that is simple enough to be implemented in a reasonable amount of time, but complex enough to require some thought about architecture and design.
 
-The business logic is simple (start, pause, resume, reset, tick), but the goal of this project is not complexity in features. The goal is to practice writing software with the best engineering standards I can apply today: architecture, code quality, CI/CD, repository hygiene, and release discipline.
+I have also tried to apply some good practices like test driven development, continuous integration and deployment, and code reviews. I have also tried to use some of the latest features of Rust and Tauri, like async/await, macros, and the new Tauri API. and of course, tried to have the GitHub repository as clean and well organized as possible, with a clear README, a good commit history, github project linked to the repository, and a good use of branches and pull requests.
 
-## Why This Project Exists
+# Features
+- A pomodoro timer with a customizable work and break duration
 
-This is a deliberate learning project with a clear constraint:
-
-- Keep product logic trivial.
-- Treat everything else like a production codebase.
-
-
-## Project Goals
-
-- Apply clean architecture / hexagonal thinking on a tiny domain.
-- Keep boundaries explicit between domain, inbound ports, and outbound ports.
-- Maintain strong quality gates (formatting, linting, tests, builds).
-- Run robust CI/CD across platforms (Linux, Windows, macOS).
-- Build repeatable release workflows and repository practices.
-
-## Tech Stack
-
-- Desktop app framework: Tauri v2
-- Frontend: SvelteKit + TypeScript
-- Backend/core: Rust
-- Automation: GitHub Actions
-
-## Architecture Overview
-
-Rust code is organized around ports and domain responsibilities:
-
-- `AWTOPT/src-tauri/src/domain/`: core business entities and rules.
-- `AWTOPT/src-tauri/src/ports/inbound/`: use-case interfaces and orchestration.
-- `AWTOPT/src-tauri/src/ports/outbound/`: abstractions for side effects (notify, save, schedule).
-
-The point is to keep the core logic isolated and testable while infrastructure concerns stay behind interfaces.
-
-## Repository Structure
-
-```text
-AWTOPT/
-	src/                 # Svelte frontend
-	src-tauri/           # Rust + Tauri app core
-scripts/
-	quickie.sh           # Fast local checks
-	pre-push-check.sh    # Full local validation
-	security-check.sh    # Security scans
-.github/workflows/
-	ci.yml               # Main CI
-	quality.yml          # Quality metrics and analysis
-	release.yml          # Tagged releases
-```
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 20+
-- npm
-- Rust (stable toolchain)
-- Tauri build dependencies for your OS (Linux needs GTK/WebKit packages)
-
-### Install
+# Installation
+To install the application, you can download the latest release from the [releases page]([https](https://github.com/PumpKinzzzzz/A_Way_Too_Overengineered_Pomodoro_Timer/releases). Alternatively, you can clone the repository and build the application yourself using the following commands:
 
 ```bash
-cd AWTOPT
-npm ci
+git clone
+cd A_Way_Too_Overengineered_Pomodoro_Timer
+cargo build --release
 ```
+# Usage
+I didn't implement the UI yet so it's comming soon...
 
-### Run in Development
+# Contributing
+If you want to contribute to the project, feel free to open a pull request or an issue. I welcome any contributions, whether it's a bug fix, a new feature, or just some feedback.
 
-```bash
-cd AWTOPT
-npm run tauri dev
-```
+You can access more about the code in the Wiki section of the repository, where I have documented the architecture and design decisions, as well as some of the challenges I faced and how I overcame them.
 
-### Build
-
-```bash
-cd AWTOPT
-npm run tauri build
-```
-
-## Local Quality Checks
-
-Quick checks:
-
-```bash
-./scripts/quickie.sh
-```
-
-Full pre-push checks:
-
-```bash
-./scripts/pre-push-check.sh
-```
-
-Security checks:
-
-```bash
-./scripts/security-check.sh
-```
-
-## CI/CD
-
-The project uses three workflows:
-
-- `ci.yml`: frontend + backend checks, integration build, and security reporting.
-- `quality.yml`: coverage, benchmarks, dependency analysis, quality metrics.
-- `release.yml`: tag-driven, cross-platform release artifacts.
-
-Linux Tauri dependencies are centralized in:
-
-- `.github/actions/install-tauri-linux-deps/action.yml`
-
-This avoids drift across workflows when Ubuntu/Tauri requirements change.
-
-For additional CI/CD details, see `.github/README.md`.
-
-## Release Flow
-
-1. Update `CHANGELOG.md`.
-2. Create a version tag:
-
-```bash
-git tag -a v1.0.0 -m "Release version 1.0.0"
-git push origin v1.0.0
-```
-
-3. Let GitHub Actions build and publish release artifacts.
-
-## Current Mindset
-
-This repository is a snapshot of my current engineering level. The idea is to keep shipping improvements over time and raise the quality bar each iteration.
-
-If something looks "too much" for a Pomodoro timer, that is the point.
 
