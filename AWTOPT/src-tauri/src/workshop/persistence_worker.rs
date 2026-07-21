@@ -1,5 +1,5 @@
 use crate::contracts::AppSave;
-use crate::warehouse::PersistenceTool;
+use crate::tools::PersistenceTool;
 
 pub struct PersistenceWorker {
     tool: PersistenceTool,

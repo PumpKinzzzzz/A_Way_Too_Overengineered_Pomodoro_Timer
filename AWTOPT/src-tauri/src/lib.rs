@@ -1,13 +1,13 @@
 pub mod contracts;
-pub mod desk;
-pub mod warehouse;
+pub mod orchestrators;
+pub mod tools;
 pub mod workshop;
 
 use contracts::{SessionStatsDto, SettingsDto, SettingsUpdateDto, TimerStatusDto};
-use desk::PomodoroOrchestrator;
+use orchestrators::PomodoroOrchestrator;
 use std::sync::Mutex;
 use tauri::{Manager, State};
-use warehouse::{PersistenceTool, TauriNotifierTool};
+use tools::{PersistenceTool, TauriNotifierTool};
 use workshop::{NotifierWorker, PersistenceWorker, SessionWorker, SettingsWorker, TimerWorker};
 
 #[tauri::command]

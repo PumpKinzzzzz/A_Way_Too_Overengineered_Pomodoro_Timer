@@ -1,5 +1,5 @@
 use crate::contracts::*;
-use crate::warehouse::TauriNotifierTool;
+use crate::tools::TauriNotifierTool;
 use crate::workshop::{
     NotifierWorker, PersistenceWorker, SessionWorker, SettingsWorker, TimerWorker,
 };
