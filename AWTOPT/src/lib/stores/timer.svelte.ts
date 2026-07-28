@@ -28,6 +28,10 @@ class TimerStore {
 		await this.#run(() => api.resetTimer());
 	}
 
+	async skipToNext() {
+		await this.#run(() => api.skipToNext());
+	}
+
 	async #tickOnce() {
 		await this.#run(() => api.tick());
 	}

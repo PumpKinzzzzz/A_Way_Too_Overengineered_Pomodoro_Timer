@@ -2,6 +2,7 @@
 	import SettingsForm from './SettingsForm.svelte';
 	import ErrorBanner from './ErrorBanner.svelte';
 	import { settingsStore } from '../stores/settings.svelte';
+	import { timerStore } from '../stores/timer.svelte';
 	import type { SettingsUpdateDto } from '../types/dtos';
 
 	let {
@@ -15,6 +16,7 @@
 	async function handleSave(patch: SettingsUpdateDto) {
 		await settingsStore.update(patch);
 		if (!settingsStore.error) {
+			await timerStore.reset();
 			onClose();
 		}
 	}

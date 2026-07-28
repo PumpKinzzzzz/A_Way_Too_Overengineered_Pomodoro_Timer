@@ -110,6 +110,31 @@ impl Timer {
             }
         }
     }
+
+    pub fn skip_to_next(&mut self) {
+        if !matches!(self.state, TimerState::Idle | TimerState::Completed) {
+            self.current_cycle_index += 1;
+
+            if self.current_cycle_index >= self.sequence_list.len() {
+                self.state = TimerState::Completed;
+                return;
+            }
+
+            let next = self.sequence_list[self.current_cycle_index];
+            self.time_remaining = match next {
+                Sequence::Work => self.durations.0 * 60,
+                Sequence::ShortBreak => self.durations.1 * 60,
+                Sequence::LongBreak => self.durations.2 * 60,
+            };
+            let blocks_auto_start = matches!(next, Sequence::ShortBreak | Sequence::LongBreak)
+                && !self.auto_start_breaks;
+            self.state = if blocks_auto_start {
+                TimerState::Paused
+            } else {
+                TimerState::Running(next)
+            };
+        }
+    }
 }
 
 pub struct Settings {
@@ -247,6 +272,17 @@ impl TimerWorker {
             self.current_cycle_index += 1;
         }
 
+        Ok(self.get_status())
+    }
+
+    pub fn skip_to_next(&mut self) -> Result<TimerStatusDto, String> {
+        self.timer.skip_to_next();
+        if !matches!(
+            self.timer.get_state(),
+            TimerState::Idle | TimerState::Completed
+        ) {
+            self.current_cycle_index += 1;
+        }
         Ok(self.get_status())
     }
 

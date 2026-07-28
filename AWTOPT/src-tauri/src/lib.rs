@@ -85,6 +85,14 @@ fn get_session_stats(state: State<Mutex<PomodoroOrchestrator>>) -> Result<Sessio
         .handle_get_session_stats()
 }
 
+#[tauri::command]
+fn skip_to_next(state: State<Mutex<PomodoroOrchestrator>>) -> Result<TimerStatusDto, String> {
+    state
+        .lock()
+        .map_err(|_| "Failed to acquire state lock".to_string())?
+        .handle_skip_to_next()
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -136,7 +144,8 @@ pub fn run() {
             update_settings,
             get_settings,
             get_timer_status,
-            get_session_stats
+            get_session_stats,
+            skip_to_next
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

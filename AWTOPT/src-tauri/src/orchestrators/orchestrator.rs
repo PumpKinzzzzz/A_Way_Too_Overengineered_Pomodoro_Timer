@@ -114,4 +114,26 @@ impl PomodoroOrchestrator {
     pub fn handle_get_session_stats(&self) -> Result<SessionStatsDto, String> {
         Ok(self.session_worker.get_stats())
     }
+
+    pub fn handle_skip_to_next(&mut self) -> Result<TimerStatusDto, String> {
+        let response = self.timer_worker.skip_to_next()?;
+        self.session_worker.increment_cycle();
+        self.notifier_worker
+            .notify_cycle_completed(response.current_cycle);
+
+        if let TimerStateDto::Running { sequence } = &response.state {
+            match sequence {
+                SequenceType::Work => self.notifier_worker.notify_work_started(),
+                SequenceType::ShortBreak => self.notifier_worker.notify_break_started(false),
+                SequenceType::LongBreak => self.notifier_worker.notify_break_started(true),
+            }
+        }
+
+        if matches!(response.state, TimerStateDto::Completed) {
+            self.notifier_worker.notify_all_completed();
+            self.save_current_state()?;
+        }
+
+        Ok(response)
+    }
 }

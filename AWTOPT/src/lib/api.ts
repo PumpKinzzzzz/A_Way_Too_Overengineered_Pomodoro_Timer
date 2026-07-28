@@ -36,3 +36,7 @@ export async function getTimerStatus(): Promise<TimerStatusDto> {
 export async function getSessionStats(): Promise<SessionStatsDto> {
 	return await invoke<SessionStatsDto>('get_session_stats');
 }
+
+export async function skipToNext(): Promise<TimerStatusDto> {
+	return await invoke<TimerStatusDto>('skip_to_next');
+}

@@ -9,7 +9,8 @@
 		onStart,
 		onPause,
 		onResume,
-		onReset
+		onReset,
+		onSkip
 	}: {
 		status: TimerStatusDto;
 		settings: SettingsDto | null;
@@ -17,6 +18,7 @@
 		onPause: () => void;
 		onResume: () => void;
 		onReset: () => void;
+		onSkip: () => void;
 	} = $props();
 
 	let controls = $derived(deriveControlState(status.state));
@@ -36,6 +38,9 @@
 	{/if}
 	{#if controls.canReset}
 		<button class="button button-danger" onclick={onReset}>Reset</button>
+	{/if}
+	{#if controls.canPause || controls.canResume}
+		<button class="button button-secondary" onclick={onSkip}>Skip</button>
 	{/if}
 </div>
 

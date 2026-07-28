@@ -47,6 +47,7 @@
 			onPause={() => timerStore.pause()}
 			onResume={() => timerStore.resume()}
 			onReset={() => timerStore.reset()}
+			onSkip={() => timerStore.skipToNext()}
 		/>
 	{:else if statsStore.stats}
 		<StatsPanel stats={statsStore.stats} />
