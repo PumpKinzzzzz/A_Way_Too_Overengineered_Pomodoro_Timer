@@ -66,8 +66,11 @@ impl PomodoroOrchestrator {
 
     pub fn handle_tick(&mut self) -> Result<TimerStatusDto, String> {
         let status_before = self.timer_worker.get_status();
+        let was_running = matches!(status_before.state, TimerStateDto::Running { .. });
         let response = self.timer_worker.tick()?;
-        self.session_worker.record_time(1);
+        if was_running {
+            self.session_worker.record_time(1);
+        }
 
         if status_before.time_remaining == 1 && response.time_remaining != 0 {
             self.session_worker.increment_cycle();

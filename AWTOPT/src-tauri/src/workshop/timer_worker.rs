@@ -7,6 +7,7 @@ pub struct Timer {
     time_remaining: u64,
     sequence_list: Vec<Sequence>,
     durations: (u64, u64, u64),
+    auto_start_breaks: bool,
 }
 
 pub enum TimerState {
@@ -28,6 +29,7 @@ impl Timer {
                 settings.get_short_break_duration(),
                 settings.get_long_break_duration(),
             ),
+            auto_start_breaks: settings.is_auto_start_breaks(),
         }
     }
 
@@ -98,7 +100,13 @@ impl Timer {
                     Sequence::ShortBreak => self.durations.1 * 60,
                     Sequence::LongBreak => self.durations.2 * 60,
                 };
-                self.state = TimerState::Running(next);
+                let blocks_auto_start = matches!(next, Sequence::ShortBreak | Sequence::LongBreak)
+                    && !self.auto_start_breaks;
+                self.state = if blocks_auto_start {
+                    TimerState::Paused
+                } else {
+                    TimerState::Running(next)
+                };
             }
         }
     }
@@ -329,5 +337,93 @@ mod tests {
         // Reset
         let status = worker.reset().unwrap();
         assert_eq!(status.state, TimerStateDto::Idle);
+    }
+
+    #[test]
+    fn test_auto_start_breaks_false_blocks_next_phase() {
+        let mut settings = Settings::new();
+        settings.update_work_duration(0);
+        settings.toggle_auto_start_breaks();
+        let mut timer = Timer::new(&settings);
+
+        timer.start();
+        assert!(matches!(timer.state, TimerState::Running(Sequence::Work)));
+
+        timer.tick();
+        assert!(matches!(timer.state, TimerState::Paused));
+        assert_eq!(
+            timer.time_remaining,
+            settings.get_short_break_duration() * 60
+        );
+
+        timer.resume();
+        assert!(matches!(
+            timer.state,
+            TimerState::Running(Sequence::ShortBreak)
+        ));
+    }
+
+    #[test]
+    fn test_auto_start_breaks_true_continues_automatically() {
+        let mut settings = Settings::new();
+        settings.update_work_duration(0);
+        let mut timer = Timer::new(&settings);
+
+        timer.start();
+        timer.tick();
+        assert!(matches!(
+            timer.state,
+            TimerState::Running(Sequence::ShortBreak)
+        ));
+    }
+
+    #[test]
+    fn test_auto_start_breaks_does_not_block_work_phase() {
+        let mut settings = Settings::new();
+        settings.update_work_duration(0);
+        settings.update_short_break_duration(0);
+        settings.toggle_auto_start_breaks();
+        let mut timer = Timer::new(&settings);
+
+        timer.start();
+        timer.tick();
+        assert!(matches!(timer.state, TimerState::Paused));
+
+        timer.resume();
+        assert!(matches!(
+            timer.state,
+            TimerState::Running(Sequence::ShortBreak)
+        ));
+
+        timer.tick();
+        assert!(matches!(timer.state, TimerState::Running(Sequence::Work)));
+    }
+
+    #[test]
+    fn test_timer_worker_blocks_auto_start_and_resumes() {
+        let mut settings = Settings::new();
+        settings.update_work_duration(1);
+        settings.toggle_auto_start_breaks();
+        let mut worker = TimerWorker::new(&settings);
+
+        worker.start().unwrap();
+        let mut status = worker.tick().unwrap();
+        for _ in 0..59 {
+            status = worker.tick().unwrap();
+        }
+        assert_eq!(status.state, TimerStateDto::Paused);
+        assert_eq!(status.current_cycle, 1);
+        assert_eq!(
+            status.time_remaining,
+            settings.get_short_break_duration() * 60
+        );
+
+        let status = worker.resume().unwrap();
+        assert!(matches!(
+            status.state,
+            TimerStateDto::Running {
+                sequence: SequenceType::ShortBreak
+            }
+        ));
     }
 }
