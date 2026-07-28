@@ -1,4 +1,4 @@
-use crate::contracts::AppSave;
+use crate::contracts::{AppSave, PersistenceTrait};
 use std::fs;
 use std::path::PathBuf;
 use tauri::Manager;
@@ -52,6 +52,24 @@ impl PersistenceTool {
                 .map_err(|e| format!("Failed to delete state file: {}", e))?;
         }
         Ok(())
+    }
+}
+
+impl PersistenceTrait for PersistenceTool {
+    fn save_state(&self, state: &AppSave) -> Result<(), String> {
+        PersistenceTool::save_state(self, state)
+    }
+
+    fn load_state(&self) -> Result<AppSave, String> {
+        PersistenceTool::load_state(self)
+    }
+
+    fn state_exists(&self) -> bool {
+        PersistenceTool::state_exists(self)
+    }
+
+    fn delete_state(&self) -> Result<(), String> {
+        PersistenceTool::delete_state(self)
     }
 }
 

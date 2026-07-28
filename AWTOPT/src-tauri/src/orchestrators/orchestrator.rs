@@ -1,5 +1,5 @@
 use crate::contracts::*;
-use crate::tools::TauriNotifierTool;
+use crate::tools::{PersistenceTool, TauriNotifierTool};
 use crate::workshop::{
     NotifierWorker, PersistenceWorker, SessionWorker, SettingsWorker, TimerWorker,
 };
@@ -8,7 +8,7 @@ pub struct PomodoroOrchestrator {
     timer_worker: TimerWorker,
     settings_worker: SettingsWorker,
     session_worker: SessionWorker,
-    persistence_worker: PersistenceWorker,
+    persistence_worker: PersistenceWorker<PersistenceTool>,
     notifier_worker: NotifierWorker<TauriNotifierTool>,
 }
 
@@ -17,7 +17,7 @@ impl PomodoroOrchestrator {
         timer_worker: TimerWorker,
         settings_worker: SettingsWorker,
         session_worker: SessionWorker,
-        persistence_worker: PersistenceWorker,
+        persistence_worker: PersistenceWorker<PersistenceTool>,
         notifier_worker: NotifierWorker<TauriNotifierTool>,
     ) -> Self {
         Self {
