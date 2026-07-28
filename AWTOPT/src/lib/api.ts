@@ -1,43 +1,5 @@
 import { invoke } from '@tauri-apps/api/core';
-
-// Types correspondant aux DTOs Rust
-
-export interface TimerStatusDto {
-	state: 'Idle' | 'Running' | 'Paused' | 'WorkComplete' | 'BreakComplete';
-	remaining_seconds: number;
-	total_seconds: number;
-	current_phase: 'Work' | 'ShortBreak' | 'LongBreak';
-}
-
-export interface SettingsDto {
-	work_duration_minutes: number;
-	short_break_minutes: number;
-	long_break_minutes: number;
-	sessions_until_long_break: number;
-	auto_start_breaks: boolean;
-	auto_start_work: boolean;
-	notifications_enabled: boolean;
-}
-
-export interface SettingsUpdateDto {
-	work_duration_minutes?: number;
-	short_break_minutes?: number;
-	long_break_minutes?: number;
-	sessions_until_long_break?: number;
-	auto_start_breaks?: boolean;
-	auto_start_work?: boolean;
-	notifications_enabled?: boolean;
-}
-
-export interface SessionStatsDto {
-	completed_pomodoros: number;
-	completed_short_breaks: number;
-	completed_long_breaks: number;
-	total_work_seconds: number;
-	total_break_seconds: number;
-}
-
-// API Functions
+import type { TimerStatusDto, SettingsDto, SettingsUpdateDto, SessionStatsDto } from './types/dtos';
 
 export async function startTimer(): Promise<TimerStatusDto> {
 	return await invoke<TimerStatusDto>('start_timer');
